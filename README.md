@@ -1,7 +1,6 @@
 # Re-U-Project CN334 Web Development Final Project by Used2becool group
-TU-PINE Software Engineering CN334 Template.
 
-This project use template from CN334 Webapplication Development template.
+This project use template from TU-PINE Software Engineering CN334 Template for CN334 Webapplication Development.
 
 Create by Dr.[Akkharawoot Takhom](mailto:takkhara@engr.tu.ac.th)(Instructor) and [Tharathon Utasri](mailto:tharathon.ut@gmail.com)(TA)
 
