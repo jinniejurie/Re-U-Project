@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
@@ -40,6 +41,12 @@ const ProductPreview = ({ image, title, price, id, category }) => (
 );
 
 export default function Home() {
+  const categoriesRef = useRef(null);
+
+  const scrollToCategories = () => {
+    categoriesRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   // Mock data for categories
   const categories = [
     {
@@ -112,6 +119,7 @@ export default function Home() {
                 </div>
               </div>
               <button 
+                onClick={scrollToCategories}
                 className="px-8 py-3 bg-gradient-to-r from-reu-cream to-reu-pink text-reu-brown rounded-full border-2 border-reu-brown hover:opacity-90 transition-all font-normal mt-12"
               >
                 Explore Now!
@@ -122,7 +130,7 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="py-20 bg-reu-cream">
+      <section ref={categoriesRef} className="py-20 bg-reu-cream">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-reu-brown text-center mb-12">Categories</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
