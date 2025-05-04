@@ -1,14 +1,76 @@
 'use client';
 
-import Image from "next/image";
-import { useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import Footer from '@/components/Footer';
+
+const CategoryCard = ({ title, image, link }) => (
+  <Link href={link} className="block group">
+    <div className="relative aspect-square rounded-2xl overflow-hidden shadow-lg">
+      <Image
+        src={image}
+        alt={title}
+        fill
+        className="object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+        <h3 className="text-white text-2xl font-bold p-6">{title}</h3>
+      </div>
+    </div>
+  </Link>
+);
+
+const ProductPreview = ({ image, title, price, id, category }) => (
+  <Link href={`/products/${category}/${id}`} className="block">
+    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="relative aspect-square">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-lg font-medium text-reu-brown">{title}</h3>
+        <p className="text-reu-brown/80">{price}</p>
+      </div>
+    </div>
+  </Link>
+);
 
 export default function Home() {
-  const collectionRef = useRef(null);
+  // Mock data for categories
+  const categories = [
+    {
+      title: "Clothing",
+      image: "/images/clothing-category.jpg",
+      link: "/products/clothing"
+    },
+    {
+      title: "Accessories",
+      image: "/images/accessories-category.jpg",
+      link: "/products/accessories"
+    },
+    {
+      title: "Books",
+      image: "/images/books-category.jpg",
+      link: "/products/books"
+    },
+    {
+      title: "Electronics",
+      image: "/images/electronics-category.jpg",
+      link: "/products/electronics"
+    }
+  ];
 
-  const scrollToCollection = () => {
-    collectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Mock data for featured products
+  const featuredProducts = [
+    { id: 1, image: "/images/product1.jpg", title: "Num Num Shirt", price: "1000THB", category: "clothing" },
+    { id: 2, image: "/images/product2.jpg", title: "Cool Pants", price: "1000THB", category: "clothing" },
+    { id: 3, image: "/images/product3.jpg", title: "Vintage Bag", price: "1000THB", category: "accessories" },
+    { id: 4, image: "/images/product4.jpg", title: "Smart Watch", price: "1000THB", category: "electronics" },
+  ];
 
   return (
     <main>
@@ -50,7 +112,6 @@ export default function Home() {
                 </div>
               </div>
               <button 
-                onClick={scrollToCollection}
                 className="px-8 py-3 bg-gradient-to-r from-reu-cream to-reu-pink text-reu-brown rounded-full border-2 border-reu-brown hover:opacity-90 transition-all font-normal mt-12"
               >
                 Explore Now!
@@ -60,149 +121,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collection part */}
-      <section ref={collectionRef} className="py-20 bg-reu-cream overflow-hidden">
+      {/* Categories Section */}
+      <section className="py-20 bg-reu-cream">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-light mb-4">COLLECTION</h2>
-            <p className="text-xl mb-8">Discover sustainable fashion that tells a story.</p>
-          </div>
-
-          <div className="relative">
-            {/* Carousel Container */}
-            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
-              {/* Collection Item 1 */}
-              <div className="min-w-[300px] bg-white rounded-2xl shadow-lg overflow-hidden snap-center">
-                <div className="relative h-[400px]">
-                  <Image
-                    src="/images/less-trash.jpg"
-                    alt="Less Trash Collection"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-medium mb-2">Less Trash</h3>
-                  <p className="text-gray-600 mb-4">Give your unused items a second life</p>
-                  <button className="w-full bg-reu-red text-white py-2 rounded-lg hover:bg-reu-red/90 transition-colors">
-                    View Collection
-                  </button>
-                </div>
-              </div>
-
-              {/* Collection Item 2 */}
-              <div className="min-w-[300px] bg-white rounded-2xl shadow-lg overflow-hidden snap-center">
-                <div className="relative h-[400px]">
-                  <Image
-                    src="/images/u-jean.jpg"
-                    alt="U-Jean Collection"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-medium mb-2">U-Jean</h3>
-                  <p className="text-gray-600 mb-4">Sustainable denim with a story</p>
-                  <button className="w-full bg-reu-red text-white py-2 rounded-lg hover:bg-reu-red/90 transition-colors">
-                    View Collection
-                  </button>
-                </div>
-              </div>
-
-              {/* Collection Item 3 */}
-              <div className="min-w-[300px] bg-white rounded-2xl shadow-lg overflow-hidden snap-center">
-                <div className="relative h-[400px]">
-                  <Image
-                    src="/images/accessories.jpg"
-                    alt="Accessories Collection"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-medium mb-2">Accessories</h3>
-                  <p className="text-gray-600 mb-4">Complete your look sustainably</p>
-                  <button className="w-full bg-reu-red text-white py-2 rounded-lg hover:bg-reu-red/90 transition-colors">
-                    View Collection
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="flex justify-center gap-2 mt-6">
-              <button className="w-3 h-3 rounded-full bg-reu-red"></button>
-              <button className="w-3 h-3 rounded-full bg-reu-red/30"></button>
-              <button className="w-3 h-3 rounded-full bg-reu-red/30"></button>
-            </div>
+          <h2 className="text-4xl font-bold text-reu-brown text-center mb-12">Categories</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((category) => (
+              <CategoryCard key={category.title} {...category} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Sell ads part */}
-      <section className="min-h-screen bg-gradient-to-b from-reu-cream to-reu-pink flex items-center justify-center text-reu-brown">
+      {/* Featured Products Section */}
+      <section className="py-20 bg-gradient-to-t from-reu-pink to-reu-cream">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h2 className="text-4xl font-medium mb-8">Share What You Don't Use</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              try contact ur mom first i guess
-            </p>
-            <button className="px-8 py-3 bg-gradient-to-r from-reu-cream to-reu-pink text-reu-brown rounded-full border-2 border-reu-brown hover:opacity-90 transition-all font-normal">
-              Sell with us
-            </button>
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-4xl font-bold text-reu-brown">Featured Products</h2>
+            <Link 
+              href="/products" 
+              className="text-reu-red hover:text-reu-brown transition-colors flex items-center gap-2"
+            >
+              View All
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {featuredProducts.map((product) => (
+              <ProductPreview key={product.id} {...product} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-reu-pink text-reu-brown pt-16 pb-8">
-        <div className="container mx-auto px-4">
-          {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            {/* Re:U description*/}
-            <div className="md:col-span-2">
-              <h2 className="text-3xl font-bold mb-4">Re:U</h2>
-              <p className="text-sm max-w-md mb-4">
-              Give your pre-loved items a second life — right here on campus. Re:U makes it easy to buy, sell, and circulate quality finds, while reducing waste one swap at a time.
-              </p>
-            </div>
-
-            {/* Site Map */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Site Map</h3>
-              <ul className="space-y-2">
-                <li><a href="/" className="hover:text-reu-red transition-colors">Home</a></li>
-                <li><a href="/products" className="hover:text-reu-red transition-colors">Products</a></li>
-                <li><a href="/about" className="hover:text-reu-red transition-colors">About</a></li>
-                <li><a href="/contact" className="hover:text-reu-red transition-colors">Contact</a></li>
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center space-x-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  <a href="mailto:contact@reu.com" className="hover:text-reu-red transition-colors">pls don't</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-reu-brown/20 my-8"></div>
-
-          {/* Bottom Footer */}
-          <div className="text-center text-sm">
-            <p className="mb-2">CN334 Web Development Final Project</p>
-            <p className="mb-2">Re:U — Re you at University</p>
-            <p className="text-reu-brown/70">Used2BeCool Group.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 } 

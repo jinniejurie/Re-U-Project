@@ -1,0 +1,81 @@
+'use client';
+
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+
+export default function ProductDetail() {
+  const params = useParams();
+
+  // Mock product data - replace with actual data fetching
+  const product = {
+    id: params.id,
+    title: "Num Num Shirt",
+    price: "1000THB",
+    category: params.category,
+    description: "no defect jvvnf vvri3hit3 ijvihrinw wqbij fkojef jiiio ojto3j oi2jr3ihti4i 2iiroj3otj3n kfiekfnk3gjforjoj3 roiii ij23riji 2eioj jdm fi3nigoniongi fifiojir",
+    image: "/images/product1.jpg",
+    sizes: ["S", "M", "L", "XL"]
+  };
+
+  return (
+    <div className="min-h-screen bg-reu-cream">
+      {/* Product Detail*/}
+      <div className="container mx-auto px-4 flex items-center justify-center min-h-[calc(100vh-64px)] pt-8 sm:pt-12 md:pt-16">
+        <div className="max-w-7xl w-full">
+          {/* Back to Products Link */}
+          <Link 
+            href="/products" 
+            className="inline-flex items-center text-reu-red hover:text-reu-brown transition-colors mb-6 "
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Products
+          </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            {/* Product Image */}
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+              <div className="aspect-square relative">
+                <img 
+                  src={product.image} 
+                  alt={product.title}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </div>
+
+            {/* Product Info */}
+            <div className="flex flex-col justify-center">
+              <h1 className="text-3xl sm:text-4xl font-bold text-reu-brown mb-4">{product.title}</h1>
+              <p className="text-xl sm:text-2xl text-reu-brown mb-6">{product.price}</p>
+              
+              <div className="mb-8">
+                <h2 className="text-lg sm:text-xl font-semibold mb-2">Description</h2>
+                <p className="text-reu-brown/80">{product.description}</p>
+              </div>
+
+              <div className="mb-8">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4">Size</h2>
+                <div className="flex gap-4">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-reu-brown rounded-lg flex items-center justify-center hover:bg-reu-red hover:text-white hover:border-reu-red transition-colors"
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button className="bg-reu-red text-white py-3 sm:py-4 px-6 sm:px-8 rounded-full hover:bg-reu-red/90 transition-colors text-base sm:text-lg font-medium">
+                Add To Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+} 

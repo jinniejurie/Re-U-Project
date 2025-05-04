@@ -14,22 +14,37 @@ export default function Layout({ children }) {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isCollectionSection, setIsCollectionSection] = useState(false);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
   const pathname = usePathname();
   const isAuthPage = pathname === '/login' || pathname === '/register';
+  const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
+  const isProductPage = pathname === '/products';
   
   // Determine header colors based on scroll position and page
-  const headerTextColor = isAuthPage 
-    ? 'text-reu-brown' 
-    : isCollectionSection 
+  const headerTextColor = isProductDetailPage 
+    ? 'text-reu-red' 
+    : isAuthPage 
       ? 'text-reu-brown' 
-      : 'text-white';
+      : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+        ? 'text-reu-brown' 
+        : 'text-white';
   
-  const headerHoverColor = isAuthPage 
-    ? 'hover:text-reu-red' 
-    : isCollectionSection 
-      ? 'hover:text-reu-red/80' 
-      : 'hover:text-reu-cream';
+  const headerHoverColor = isProductDetailPage 
+    ? 'hover:text-reu-red/80' 
+    : isAuthPage 
+      ? 'hover:text-reu-red' 
+      : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+        ? 'hover:text-reu-red/80' 
+        : 'hover:text-reu-cream';
+
+  // Add categories data
+  const categories = [
+    { title: "Clothing", link: "/products/clothing" },
+    { title: "Accessories", link: "/products/accessories" },
+    { title: "Books", link: "/products/books" },
+    { title: "Electronics", link: "/products/electronics" }
+  ];
 
   useEffect(() => {
     const controlHeader = () => {
@@ -66,7 +81,7 @@ export default function Layout({ children }) {
       {/* Side Navigation */}
       <div className={`fixed inset-0 z-50 transition-transform duration-500 ease-in-out ${isSideNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="absolute inset-0 bg-reu-cream">
-          <div className="h-20 flex items-center justify-start px-4">
+          <div className="h-20 flex items-center justify-between px-6">
             <button 
               onClick={() => setIsSideNavOpen(false)}
               className="text-reu-brown hover:text-reu-red transition-colors"
@@ -79,16 +94,81 @@ export default function Layout({ children }) {
           <nav className="px-8 py-4">
             <ul className="space-y-6">
               <li>
-                <Link href="/" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Home</Link>
+                <Link 
+                  href="/" 
+                  onClick={() => setIsSideNavOpen(false)} 
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  Home
+                </Link>
               </li>
+              
               <li>
-                <Link href="/products" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Products</Link>
+                <Link 
+                  href="/products" 
+                  onClick={() => setIsSideNavOpen(false)} 
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  All Products
+                </Link>
               </li>
+
+              {/* Categories Dropdown */}
               <li>
-                <Link href="/about" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">About</Link>
+                <button
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  className="flex items-center justify-between w-full text-2xl text-reu-brown hover:text-reu-red transition-colors group"
+                >
+                  <span>Categories</span>
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className={`w-5 h-5 transition-transform duration-200 ${isCategoryOpen ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {/* Category List */}
+                <div className={`overflow-hidden transition-all duration-200 ease-in-out ${isCategoryOpen ? 'mt-3' : 'mt-0 h-0'}`}>
+                  <div className="pl-4 space-y-3">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.title}
+                        href={category.link}
+                        onClick={() => {
+                          setIsCategoryOpen(false);
+                          setIsSideNavOpen(false);
+                        }}
+                        className="block text-xl text-reu-brown/80 hover:text-reu-red transition-colors"
+                      >
+                        {category.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </li>
+              
               <li>
-                <Link href="/contact" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Contact</Link>
+                <Link 
+                  href="/about" 
+                  onClick={() => setIsSideNavOpen(false)} 
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+              
+              <li>
+                <Link 
+                  href="/contact" 
+                  onClick={() => setIsSideNavOpen(false)} 
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  Contact
+                </Link>
               </li>
             </ul>
           </nav>
