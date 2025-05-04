@@ -1,0 +1,172 @@
+'use client';
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Inter, Unbounded } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
+const unbounded = Unbounded({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
+
+export default function Layout({ children }) {
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isCollectionSection, setIsCollectionSection] = useState(false);
+
+  const pathname = usePathname();
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+  
+  // Determine header colors based on scroll position and page
+  const headerTextColor = isAuthPage 
+    ? 'text-reu-brown' 
+    : isCollectionSection 
+      ? 'text-reu-brown' 
+      : 'text-white';
+  
+  const headerHoverColor = isAuthPage 
+    ? 'hover:text-reu-red' 
+    : isCollectionSection 
+      ? 'hover:text-reu-red/80' 
+      : 'hover:text-reu-cream';
+
+  useEffect(() => {
+    const controlHeader = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        
+        // Check if we're in the collection section (approximately after one viewport height)
+        setIsCollectionSection(currentScrollY >= viewportHeight * 0.8);
+        
+        if (currentScrollY > lastScrollY) {
+          // Scrolling down
+          setIsHeaderVisible(false);
+        } else {
+          // Scrolling up
+          setIsHeaderVisible(true);
+        }
+
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlHeader);
+
+      return () => {
+        window.removeEventListener('scroll', controlHeader);
+      };
+    }
+  }, [lastScrollY]);
+
+  return (
+    <div className={`min-h-screen ${unbounded.className}`}>
+      {/* Side Navigation */}
+      <div className={`fixed inset-0 z-50 transition-transform duration-500 ease-in-out ${isSideNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="absolute inset-0 bg-reu-cream">
+          <div className="h-20 flex items-center justify-start px-4">
+            <button 
+              onClick={() => setIsSideNavOpen(false)}
+              className="text-reu-brown hover:text-reu-red transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <nav className="px-8 py-4">
+            <ul className="space-y-6">
+              <li>
+                <Link href="/" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Home</Link>
+              </li>
+              <li>
+                <Link href="/products" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Products</Link>
+              </li>
+              <li>
+                <Link href="/about" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">About</Link>
+              </li>
+              <li>
+                <Link href="/contact" onClick={() => setIsSideNavOpen(false)} className="text-2xl text-reu-brown hover:text-reu-red transition-colors">Contact</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      {/* Search Overlay */}
+      <div className={`fixed inset-0 z-50 transition-opacity duration-500 ${isSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-reu-cream">
+          <div className="h-20 flex items-center justify-start px-4">
+            <button 
+              onClick={() => setIsSearchOpen(false)}
+              className="text-reu-brown hover:text-reu-red transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="px-8 py-4">
+            <input 
+              type="text" 
+              placeholder="Search products..." 
+              className="w-full p-4 text-xl border-b-2 border-reu-brown bg-transparent focus:outline-none focus:border-reu-red"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out ${isSideNavOpen ? 'opacity-0' : 'opacity-100'}`}>
+        <header className="relative h-20 mx-auto">
+          <nav className="content-container flex items-center justify-between w-full h-full px-6">
+            <div className="flex-1 basis-0 h-full flex items-center">
+              <div className="relative flex items-center h-full">
+                <button 
+                  onClick={() => setIsSideNavOpen(true)}
+                  className={`flex items-center justify-center ${headerTextColor} ${headerHoverColor} transition-colors`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className={`flex-1 basis-0 flex items-center justify-center transform transition-transform duration-500 ${isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
+              <Link href="/" className={`${headerTextColor} text-3xl font-medium ${headerHoverColor} transition-colors`}>
+                Re:U
+              </Link>
+            </div>
+            <div className={`flex-1 basis-0 flex items-center justify-end gap-4 transform transition-transform duration-500 ${isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className={`${headerTextColor} ${headerHoverColor} transition-colors`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+              <Link href="/cart" className={`${headerTextColor} ${headerHoverColor} transition-colors`}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+              </Link>
+              <Link href="/login" className={`${headerTextColor} ${headerHoverColor} transition-colors`}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </Link>
+            </div>
+          </nav>
+        </header>
+      </div>
+
+      {/* Main Content */}
+      <main>
+        {children}
+      </main>
+    </div>
+  );
+} 
