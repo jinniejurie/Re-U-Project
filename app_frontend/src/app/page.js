@@ -155,7 +155,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-reu-pink text-reu-brown py-16">
+      <footer className="bg-reu-pink text-reu-brown pt-16 pb-8">
         <div className="container mx-auto px-4">
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
