@@ -24,10 +24,6 @@ export default function Register() {
   };
 
   const validateForm = () => {
-    if (!formData.email.endsWith('@dome.tu.ac.th')) {
-      setError('Email must be a TU email address (@dome.tu.ac.th)');
-      return false;
-    }
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return false;
@@ -66,7 +62,23 @@ export default function Register() {
         throw new Error(data.detail || 'Registration failed');
       }
 
-      router.push('/login');
+      // Auto-login after successful registration
+      const loginResponse = await fetch('http://localhost:8000/api/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username_or_email: formData.username,
+          password: formData.password,
+        }),
+      });
+      const loginData = await loginResponse.json();
+      if (!loginResponse.ok) {
+        throw new Error(loginData.detail || loginData.message || 'Auto-login failed');
+      }
+      localStorage.setItem('token', loginData.token);
+      router.push('/');
     } catch (err) {
       setError(err.message);
     }

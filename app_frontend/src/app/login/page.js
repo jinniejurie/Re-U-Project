@@ -2,15 +2,39 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const router = useRouter();
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+    setError('');
+    try {
+      const response = await fetch('http://localhost:8000/api/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username_or_email: usernameOrEmail,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.detail || data.message || 'Login failed');
+      }
+      // Store token (for demo, use localStorage)
+      localStorage.setItem('token', data.token);
+      router.push('/');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -24,16 +48,16 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block mb-2">
-                Email address
+              <label htmlFor="usernameOrEmail" className="block mb-2">
+                Username or Email
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="usernameOrEmail"
+                type="text"
+                value={usernameOrEmail}
+                onChange={(e) => setUsernameOrEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="example@dome.tu.ac.th"
+                placeholder="Enter your username or email"
               />
             </div>
 
