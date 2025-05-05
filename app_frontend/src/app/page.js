@@ -51,12 +51,12 @@ export default function Home() {
   const categories = [
     {
       title: "Clothing",
-      image: "/images/clothing-category.jpg",
+      image: "/images/clothing-category.avif",
       link: "/products/clothing"
     },
     {
       title: "Accessories",
-      image: "/images/accessories-category.jpg",
+      image: "/images/accessories-category.avif",
       link: "/products/accessories"
     },
     {
@@ -81,7 +81,7 @@ export default function Home() {
     },
     {
       title: "Health & Beauty",
-      image: "/images/health-beauty-category.jpg",
+      image: "/images/health-beauty-category.avif",
       link: "/products/health-beauty"
     },
     {
