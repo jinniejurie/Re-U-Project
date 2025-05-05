@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h2 className="text-3xl font-bold mb-4">Re:U</h2>
             <p className="text-sm max-w-md mb-4">
-              Empowering university students to embrace sustainable fashion and create a more eco-conscious campus community.
+            Every item has a story and at Re:U, we keep those stories going. Buy less, waste less, and connect more with fellow TU students through conscious campus shopping.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-reu-red transition-colors">
@@ -24,9 +24,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Site map */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">Site Map</h3>
             <ul className="space-y-2">
               <li><a href="/" className="hover:text-reu-red transition-colors">Home</a></li>
               <li><a href="/products" className="hover:text-reu-red transition-colors">Products</a></li>
@@ -56,7 +56,7 @@ export default function Footer() {
         <div className="text-center text-sm">
           <p className="mb-2">CN334 Web Development Final Project</p>
           <p className="mb-2">Re:U — Re you at University</p>
-          <p className="text-reu-brown/70">© 2024 Used2BeCool Group. All rights reserved.</p>
+          <p className="text-reu-brown/70">Used2BeCool Group.</p>
         </div>
       </div>
     </footer>

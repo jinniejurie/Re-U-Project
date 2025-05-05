@@ -14,18 +14,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+    <div className="min-h-screen bg-reu-cream text-reu-brown flex items-center justify-center">
       <div className="w-full px-4">
         <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-lg p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-medium text-gray-900 mb-4">Login to Account</h1>
+            <h1 className="text-3xl font-medium mb-4">Login to Account</h1>
             <p className="text-gray-600">Please enter your email and password to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-gray-700 mb-2">
-                Email address:
+              <label htmlFor="email" className="block mb-2">
+                Email address
               </label>
               <input
                 id="email"
@@ -33,13 +33,13 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="example@gmail.com"
+                placeholder="example@dome.tu.ac.th"
               />
             </div>
 
             <div className="relative">
               <div className="flex justify-between items-center mb-2">
-                <label htmlFor="password" className="block text-gray-700">
+                <label htmlFor="password" className="block">
                   Password
                 </label>
                 <Link href="/forgot-password" className="text-reu-red hover:text-reu-red/80 text-sm">

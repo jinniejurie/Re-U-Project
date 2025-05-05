@@ -1,98 +1,165 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle registration logic here
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
+
+  const validateForm = () => {
+    if (!formData.email.endsWith('@dome.tu.ac.th')) {
+      setError('Email must be a TU email address (@dome.tu.ac.th)');
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/api/auth/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          password2: formData.confirmPassword
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Registration failed');
+      }
+
+      router.push('/login');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-reu-cream flex items-center justify-center">
-      <div className="w-full px-4">
-        <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-lg p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-medium text-gray-900 mb-4">Create an Account</h1>
-            <p className="text-gray-600">Create a account to continue</p>
+    <div className="min-h-screen bg-reu-cream text-reu-brown flex items-center justify-center">
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-12">
+        <h1 className="text-3xl font-bold text-center mb-2">Create an Account</h1>
+        <p className="text-center text-gray-500 mb-8">Create a account to continue</p>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-center" role="alert">
+            <span className="block sm:inline">{error}</span>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-gray-700 mb-2">
-                Email address:
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="example@gmail.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="username" className="block text-gray-700 mb-2">
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="Username"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="••••••"
-              />
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="terms"
-                type="checkbox"
-                checked={acceptTerms}
-                onChange={(e) => setAcceptTerms(e.target.checked)}
-                className="h-4 w-4 text-reu-red focus:ring-reu-red border-gray-300 rounded"
-              />
-              <label htmlFor="terms" className="ml-2 block text-gray-700">
-                I accept terms and conditions
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg hover:bg-[#FF6B6B]/90 transition-colors font-medium"
-            >
-              Sign Up
-            </button>
-
-            <div className="text-center text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="text-reu-red hover:text-reu-red/80">
-                Login
-              </Link>
-            </div>
-          </form>
-        </div>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">Email address</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red sm:text-sm px-4 py-3 placeholder-gray-400"
+              placeholder="example@dome.tu.ac.th"
+            />
+          </div>
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium mb-1">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              required
+              value={formData.username}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red sm:text-sm px-4 py-3 placeholder-gray-400"
+              placeholder="Username"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              required
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red sm:text-sm px-4 py-3 placeholder-gray-400"
+              placeholder="Password"
+            />
+          </div>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              required
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red sm:text-sm px-4 py-3 placeholder-gray-400"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="flex items-center">
+            <input
+              id="acceptTerms"
+              name="acceptTerms"
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={e => setAcceptTerms(e.target.checked)}
+              className="h-4 w-4 text-reu-red focus:ring-reu-red border-gray-300 rounded"
+              required
+            />
+            <label htmlFor="acceptTerms" className="ml-2 block text-sm text-gray-700">
+              I accept terms and conditions
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 rounded-lg bg-[#fa6a5b] text-white font-semibold text-base hover:bg-[#e65c4d] transition-colors"
+          >
+            Sign Up
+          </button>
+          <p className="text-center text-gray-500 text-sm mt-4">
+            Already have an account?{' '}
+            <Link href="/login" className="text-reu-red hover:text-reu-brown font-medium">Login</Link>
+          </p>
+        </form>
       </div>
     </div>
   );

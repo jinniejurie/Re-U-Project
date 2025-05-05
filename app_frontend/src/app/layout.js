@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import { Unbounded } from 'next/font/google'
 import Layout from '@/components/Layout'
+import { CartProvider } from '@/context/CartContext'
 
 const unbounded = Unbounded({ 
   subsets: ['latin'],
@@ -16,8 +17,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Layout>{children}</Layout>
+      <body className={unbounded.className}>
+        <CartProvider>
+          <Layout>{children}</Layout>
+        </CartProvider>
       </body>
     </html>
   )

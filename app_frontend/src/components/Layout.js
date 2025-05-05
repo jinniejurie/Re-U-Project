@@ -20,11 +20,12 @@ export default function Layout({ children }) {
   const isAuthPage = pathname === '/login' || pathname === '/register';
   const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
   const isProductPage = pathname === '/products';
+  const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
   
   // Determine header colors based on scroll position and page
   const headerTextColor = isProductDetailPage 
     ? 'text-reu-red' 
-    : isAuthPage 
+    : isAuthPage || isCartOrCheckoutPage
       ? 'text-reu-brown' 
       : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
         ? 'text-reu-brown' 
@@ -32,7 +33,7 @@ export default function Layout({ children }) {
   
   const headerHoverColor = isProductDetailPage 
     ? 'hover:text-reu-red/80' 
-    : isAuthPage 
+    : isAuthPage || isCartOrCheckoutPage
       ? 'hover:text-reu-red' 
       : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
         ? 'hover:text-reu-red/80' 
@@ -43,7 +44,11 @@ export default function Layout({ children }) {
     { title: "Clothing", link: "/products/clothing" },
     { title: "Accessories", link: "/products/accessories" },
     { title: "Books", link: "/products/books" },
-    { title: "Electronics", link: "/products/electronics" }
+    { title: "Electronics", link: "/products/electronics" },
+    { title: "Sport Equipment", link: "/products/sport-equipment" },
+    { title: "Stationary & Art Supplies", link: "/products/stationary-art" },
+    { title: "Health & Beauty", link: "/products/health-beauty" },
+    { title: "Other", link: "/products/other" }
   ];
 
   useEffect(() => {
