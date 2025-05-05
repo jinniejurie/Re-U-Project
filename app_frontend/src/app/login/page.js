@@ -31,6 +31,7 @@ export default function Login() {
       }
       // Store token (for demo, use localStorage)
       localStorage.setItem('token', data.token);
+      window.dispatchEvent(new Event('authChange'));
       router.push('/');
     } catch (err) {
       setError(err.message);
