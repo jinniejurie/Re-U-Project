@@ -21,3 +21,6 @@ user_service/db.sqlite3
 
 *.pid
 *.sock
+
+# PostgreSQL volume
+data/db/
