@@ -51,12 +51,12 @@ export default function Home() {
   const categories = [
     {
       title: "Clothing",
-      image: "/images/clothing-category.jpg",
+      image: "/images/clothing-category.avif",
       link: "/products/clothing"
     },
     {
       title: "Accessories",
-      image: "/images/accessories-category.jpg",
+      image: "/images/accessories-category.avif",
       link: "/products/accessories"
     },
     {
@@ -68,6 +68,26 @@ export default function Home() {
       title: "Electronics",
       image: "/images/electronics-category.jpg",
       link: "/products/electronics"
+    },
+    {
+      title: "Sport Equipment",
+      image: "/images/sport-category.jpg",
+      link: "/products/sport-equipment"
+    },
+    {
+      title: "Stationary & Art Supplies",
+      image: "/images/stationary-category.jpg",
+      link: "/products/stationary-art"
+    },
+    {
+      title: "Health & Beauty",
+      image: "/images/health-beauty-category.avif",
+      link: "/products/health-beauty"
+    },
+    {
+      title: "Other",
+      image: "/images/other-category.jpg",
+      link: "/products/other"
     }
   ];
 

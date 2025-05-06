@@ -38,7 +38,11 @@ export default function CategoryPage() {
     clothing: "Clothing",
     accessories: "Accessories",
     books: "Books",
-    electronics: "Electronics"
+    electronics: "Electronics",
+    "sport-equipment": "Sport Equipment",
+    "stationary-art": "Stationary & Art Supplies",
+    "health-beauty": "Health & Beauty",
+    other: "Other"
   };
 
   return (

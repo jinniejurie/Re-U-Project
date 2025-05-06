@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,8 @@ SECRET_KEY = 'django-insecure-q)d@zxjo28)dtwn9f_^xge^t*14)aoj!(sp^fzybd)dg&nd@$z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+CORS_ALLOW_ALL_ORIGINS = True
 ALLOWED_HOSTS = []
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -41,10 +44,16 @@ INSTALLED_APPS = [
     'user_management',
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'user_management',
+    'rest_framework',
+    'corsheaders',
     'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -134,7 +143,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework_simplejwt.authentication.JWTAuthentication',
+   )
 }
