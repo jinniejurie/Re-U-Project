@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
+import { useSearchParams } from 'next/navigation';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
@@ -27,11 +27,17 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
+  const category = searchParams.get('category');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products');
+        const url = category 
+          ? `http://localhost:8000/products/${category}/`
+          : 'http://localhost:8000/products/';
+        
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -45,7 +51,7 @@ export default function Products() {
     };
 
     fetchProducts();
-  }, []);
+  }, [category]);
 
   if (loading) {
     return (
@@ -79,7 +85,9 @@ export default function Products() {
 
       {/* Products Section */}
       <div className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-reu-brown text-center mb-12">All Products</h2>
+        <h2 className="text-4xl font-bold text-reu-brown text-center mb-12">
+          {category ? `${category.charAt(0).toUpperCase() + category.slice(1)}` : 'All Products'}
+        </h2>
         
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -87,8 +95,8 @@ export default function Products() {
             <ProductCard 
               key={product.id}
               image={product.image}
-              title={product.title}
-              price={product.price}
+              title={product.name}
+              price={`${product.price}THB`}
               id={product.id}
               category={product.category}
             />
