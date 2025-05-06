@@ -2,6 +2,8 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
 
 const ProductCard = ({ image, title, price, id, category }) => (
   <Link href={`/products/${category}/${id}`} className="block">
@@ -14,8 +16,8 @@ const ProductCard = ({ image, title, price, id, category }) => (
         />
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-medium text-reu-brown">{title || "Product"}</h3>
-        <p className="text-reu-brown/80">{price || "1000THB"}</p>
+        <h3 className="text-lg font-medium text-reu-brown">{title}</h3>
+        <p className="text-reu-brown/80">{price} THB</p>
       </div>
     </div>
   </Link>

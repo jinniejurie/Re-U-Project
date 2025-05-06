@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
@@ -22,17 +24,44 @@ const ProductCard = ({ image, title, price, id, category }) => (
 );
 
 export default function Products() {
-  // Updated mock data with categories
-  const mockProducts = [
-    { id: 1, image: "/images/product1.jpg", title: "Num Num Shirt", price: "1000THB", category: "clothing" },
-    { id: 2, image: "/images/product2.jpg", title: "Cool Pants", price: "1000THB", category: "clothing" },
-    { id: 3, image: "/images/product3.jpg", title: "Vintage Bag", price: "1000THB", category: "accessories" },
-    { id: 4, image: "/images/product4.jpg", title: "Product", price: "1000THB", category: "clothing" },
-    { id: 5, image: "/images/product5.jpg", title: "Product", price: "1000THB", category: "clothing" },
-    { id: 6, image: "/images/product6.jpg", title: "Product", price: "1000THB", category: "clothing" },
-    { id: 7, image: "/images/product7.jpg", title: "Product", price: "1000THB", category: "accessories" },
-    { id: 8, image: "/images/product8.jpg", title: "Product", price: "1000THB", category: "accessories" },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+        <div className="text-reu-brown text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+        <div className="text-reu-red text-xl">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-reu-cream">
@@ -54,7 +83,7 @@ export default function Products() {
         
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {mockProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard 
               key={product.id}
               image={product.image}
