@@ -4,7 +4,6 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-
 const ProductCard = ({ image, title, price, id, category }) => (
   <Link href={`/products/${category}/${id}`} className="block">
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -26,13 +25,30 @@ const ProductCard = ({ image, title, price, id, category }) => (
 export default function CategoryPage() {
   const params = useParams();
   const category = params.category;
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock data - replace with actual data later
-  const categoryProducts = [
-    { id: 1, image: "/images/product1.jpg", title: "Num Num Shirt", price: "1000THB", category: "clothing" },
-    { id: 2, image: "/images/product2.jpg", title: "Cool Pants", price: "1000THB", category: "clothing" },
-    // Add more products for each category
-  ].filter(product => product.category === category);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/products/${category}/`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (category) {
+      fetchProducts();
+    }
+  }, [category]);
 
   const categoryTitles = {
     clothing: "Clothing",
@@ -44,6 +60,22 @@ export default function CategoryPage() {
     "health-beauty": "Health & Beauty",
     other: "Other"
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+        <div className="text-reu-brown text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+        <div className="text-reu-red text-xl">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-reu-cream">
@@ -62,10 +94,14 @@ export default function CategoryPage() {
       {/* Products Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {categoryProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard 
               key={product.id}
-              {...product}
+              image={product.image}
+              title={product.name}
+              price={product.price}
+              id={product.id}
+              category={product.category}
             />
           ))}
         </div>
