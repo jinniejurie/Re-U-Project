@@ -69,21 +69,6 @@ export default function ProductDetail() {
                 <p className="text-reu-brown/80">{product.description}</p>
               </div>
 
-              {/* Optional: Sizes (ถ้ายังใช้ mock อยู่ จะต้องแยกทำอีกที) */}
-              <div className="mb-8">
-                <h2 className="text-lg sm:text-xl font-semibold mb-4">Size</h2>
-                <div className="flex gap-4">
-                  {["S", "M", "L", "XL"].map((size) => (
-                    <button
-                      key={size}
-                      className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-reu-brown rounded-lg flex items-center justify-center hover:bg-reu-red hover:text-white hover:border-reu-red transition-colors"
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <button className="bg-reu-red text-white py-3 sm:py-4 px-6 sm:px-8 rounded-full hover:bg-reu-red/90 transition-colors text-base sm:text-lg font-medium">
                 Add To Cart
               </button>

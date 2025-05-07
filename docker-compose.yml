@@ -37,19 +37,6 @@ services:
       - POSTGRES_PASSWORD=cn334Admin
     depends_on:
       - db
-  auth_api:
-    build: ./auth_service
-    command: python manage.py runserver 0.0.0.0:8888
-    volumes:
-      - ./auth_service:/code
-    ports:
-      - "3344:8888"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=cn334Admin
-      - POSTGRES_PASSWORD=cn334Admin
-    depends_on:
-      - db
   front_end:
     build: ./app_frontend
     command: npm run dev
