@@ -7,20 +7,18 @@ services:
       - ./data/media:/code/media
       - ./product_service/.env:/code/.env
     ports:
-      - "3341:8888"
+      - "3344:8888"
     environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=cn334Admin
-      - POSTGRES_PASSWORD=cn334Admin
-      - POSTGRES_HOST=db
+      - DATABASE_URL=postgresql://reudb_user:pMXsddDmVLVKRkeNnDVjchdydwVSxnR3@dpg-d0did56uk2gs73d5ar5g-a.singapore-postgres.render.com/reudb
   frontend:
     build: ./app_frontend
+    command: npm run dev
     volumes:
       - ./app_frontend:/app
       - /app/node_modules
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3341
+      - NEXT_PUBLIC_API_URL=http://localhost:3344
     depends_on:
       - product_api

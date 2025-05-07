@@ -33,7 +33,7 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3341/products/${category}/`);
+        const response = await fetch(`http://localhost:3344/products/${category}/`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }

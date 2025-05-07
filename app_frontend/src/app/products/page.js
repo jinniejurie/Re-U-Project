@@ -34,8 +34,8 @@ export default function Products() {
     const fetchProducts = async () => {
       try {
         const url = category 
-          ? `http://localhost:3341/products/${category}/`
-          : 'http://localhost:3341/products/';
+          ? `http://localhost:3344/products/${category}/`
+          : 'http://localhost:3344/products/';
         
         const response = await fetch(url);
         if (!response.ok) {

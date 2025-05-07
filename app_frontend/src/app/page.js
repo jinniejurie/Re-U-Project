@@ -52,7 +52,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchFeaturedProducts() {
       try {
-        const response = await fetch('http://localhost:3341/products/');
+        const response = await fetch('http://localhost:3344/products/');
         if (!response.ok) {
           throw new Error('Failed to fetch featured products');
         }

@@ -14,7 +14,7 @@ export default function ProductDetail() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`http://localhost:3341/products/${category}/${id}/`);
+        const res = await fetch(`http://localhost:3344/products/${category}/${id}/`);
         const data = await res.json();
         setProduct(data);
       } catch (error) {
