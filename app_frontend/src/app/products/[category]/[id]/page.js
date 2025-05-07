@@ -3,13 +3,16 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ProductDetail() {
   const params = useParams();
   const { category, id } = params;
+  const router = useRouter();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -28,6 +31,41 @@ export default function ProductDetail() {
       fetchProduct();
     }
   }, [category, id]);
+
+  const handleAddToCart = () => {
+    try {
+      setAddingToCart(true);
+      
+      // Get existing cart from localStorage
+      const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      
+      // Check if product already exists in cart
+      const existingItemIndex = existingCart.findIndex(item => item.product_id === product.id);
+      
+      if (existingItemIndex > -1) {
+        // Update quantity if product exists
+        existingCart[existingItemIndex].quantity += 1;
+      } else {
+        // Add new item if product doesn't exist
+        existingCart.push({
+          product_id: product.id,
+          product_name: product.name,
+          product_price: parseFloat(product.price),
+          quantity: 1,
+          image: product.image
+        });
+      }
+      
+      // Save updated cart to localStorage
+      localStorage.setItem('cart', JSON.stringify(existingCart));
+      alert('Product added to cart successfully!');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart. Please try again.');
+    } finally {
+      setAddingToCart(false);
+    }
+  };
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
   if (!product || product.error) return <div className="text-center py-10 text-red-600">Product not found.</div>;
@@ -69,8 +107,14 @@ export default function ProductDetail() {
                 <p className="text-reu-brown/80">{product.description}</p>
               </div>
 
-              <button className="bg-reu-red text-white py-3 sm:py-4 px-6 sm:px-8 rounded-full hover:bg-reu-red/90 transition-colors text-base sm:text-lg font-medium">
-                Add To Cart
+              <button 
+                onClick={handleAddToCart}
+                disabled={addingToCart}
+                className={`bg-reu-red text-white py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors text-base sm:text-lg font-medium ${
+                  addingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:bg-reu-red/90'
+                }`}
+              >
+                {addingToCart ? 'Adding to Cart...' : 'Add To Cart'}
               </button>
             </div>
           </div>
