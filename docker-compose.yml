@@ -10,6 +10,16 @@ services:
       - "3344:8888"
     environment:
       - DATABASE_URL=postgresql://reudb_user:pMXsddDmVLVKRkeNnDVjchdydwVSxnR3@dpg-d0did56uk2gs73d5ar5g-a.singapore-postgres.render.com/reudb
+  user_api:
+    build: ./user_service
+    command: python manage.py runserver 0.0.0.0:8889
+    volumes:
+      - ./user_service:/code
+      - ./user_service/.env:/code/.env
+    ports:
+      - "3345:8889"
+    environment:
+      - DATABASE_URL=postgresql://reudb_user:pMXsddDmVLVKRkeNnDVjchdydwVSxnR3@dpg-d0did56uk2gs73d5ar5g-a.singapore-postgres.render.com/reudb
   frontend:
     build: ./app_frontend
     command: npm run dev
@@ -20,5 +30,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3344
+      - NEXT_PUBLIC_USER_API_URL=http://localhost:3345
     depends_on:
       - product_api
+      - user_api
