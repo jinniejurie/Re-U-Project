@@ -7,6 +7,7 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=cn334Admin
       - POSTGRES_PASSWORD=cn334Admin
+       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5432:5432"
   product_api:
