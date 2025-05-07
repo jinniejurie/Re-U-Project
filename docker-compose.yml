@@ -55,5 +55,8 @@ services:
     volumes:
       - ./app_frontend:/app
       - /app/node_modules
+      - ./app_frontend/.next:/app/.next
     ports:
       - "3343:3000"
+    environment:
+      - NEXT_TELEMETRY_DISABLED=1

@@ -5,19 +5,19 @@ import { useSearchParams } from 'next/navigation';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
-const ProductCard = ({ image, title, price, id, category }) => (
-  <Link href={`/products/${category}/${id}`} className="block">
+const ProductCard = ({ product }) => (
+  <Link href={`/products/${product.category}/${product.id}`} className="block">
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={image || "/placeholder-product.jpg"} 
-          alt={title} 
+          src={product.image || "/placeholder-product.jpg"} 
+          alt={product.name} 
           className="object-cover w-full h-full"
         />
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-medium text-reu-brown">{title || "Product"}</h3>
-        <p className="text-reu-brown/80">{price || "1000THB"}</p>
+        <h3 className="text-lg font-medium text-reu-brown">{product.name}</h3>
+        <p className="text-reu-brown/80">{product.price} THB</p>
       </div>
     </div>
   </Link>
@@ -34,8 +34,8 @@ export default function Products() {
     const fetchProducts = async () => {
       try {
         const url = category 
-          ? `http://localhost:8000/products/${category}/`
-          : 'http://localhost:8000/products/';
+          ? `http://localhost:3341/products/${category}/`
+          : 'http://localhost:3341/products/';
         
         const response = await fetch(url);
         if (!response.ok) {
@@ -94,11 +94,7 @@ export default function Products() {
           {products.map((product) => (
             <ProductCard 
               key={product.id}
-              image={product.image}
-              title={product.name}
-              price={`${product.price}THB`}
-              id={product.id}
-              category={product.category}
+              product={product}
             />
           ))}
         </div>

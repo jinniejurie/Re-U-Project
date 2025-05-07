@@ -21,3 +21,5 @@ user_service/db.sqlite3
 
 *.pid
 *.sock
+
+data/db

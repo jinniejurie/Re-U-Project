@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Footer from '@/components/Footer';
 
 const ProductCard = ({ image, title, price, id, category }) => (
   <Link href={`/products/${category}/${id}`} className="block">
@@ -32,7 +33,7 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/products/${category}/`);
+        const response = await fetch(`http://localhost:3341/products/${category}/`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -93,6 +94,11 @@ export default function CategoryPage() {
 
       {/* Products Section */}
       <div className="container mx-auto px-4 py-16">
+        <h2 className="text-4xl font-bold text-reu-brown text-center mb-12">
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </h2>
+        
+        {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <ProductCard 
@@ -106,6 +112,8 @@ export default function CategoryPage() {
           ))}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 } 

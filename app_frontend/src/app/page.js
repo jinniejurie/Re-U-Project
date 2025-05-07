@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
@@ -21,20 +21,19 @@ const CategoryCard = ({ title, image, link }) => (
   </Link>
 );
 
-const ProductPreview = ({ image, title, price, id, category }) => (
-  <Link href={`/products/${category}/${id}`} className="block">
+const ProductPreview = ({ product }) => (
+  <Link href={`/products/${product.category}/${product.id}`} className="block">
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover"
+        <img 
+          src={product.image} 
+          alt={product.name}
+          className="object-cover w-full h-full"
         />
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-medium text-reu-brown">{title}</h3>
-        <p className="text-reu-brown/80">{price}</p>
+        <h3 className="text-lg font-medium text-reu-brown">{product.name}</h3>
+        <p className="text-reu-brown/80">{product.price} THB</p>
       </div>
     </div>
   </Link>
@@ -42,10 +41,34 @@ const ProductPreview = ({ image, title, price, id, category }) => (
 
 export default function Home() {
   const categoriesRef = useRef(null);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   const scrollToCategories = () => {
     categoriesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    async function fetchFeaturedProducts() {
+      try {
+        const response = await fetch('http://localhost:3341/products/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch featured products');
+        }
+        const data = await response.json();
+        console.log('API Response:', data);
+        setFeaturedProducts(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchFeaturedProducts();
+  }, []);
+
 
   // Mock data for categories
   const categories = [
@@ -89,14 +112,6 @@ export default function Home() {
       image: "/images/other-category.jpg",
       link: "/products/other"
     }
-  ];
-
-  // Mock data for featured products
-  const featuredProducts = [
-    { id: 1, image: "/images/product1.jpg", title: "Num Num Shirt", price: "1000THB", category: "clothing" },
-    { id: 2, image: "/images/product2.jpg", title: "Cool Pants", price: "1000THB", category: "clothing" },
-    { id: 3, image: "/images/product3.jpg", title: "Vintage Bag", price: "1000THB", category: "accessories" },
-    { id: 4, image: "/images/product4.jpg", title: "Smart Watch", price: "1000THB", category: "electronics" },
   ];
 
   return (
@@ -176,11 +191,18 @@ export default function Home() {
               </svg>
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
-              <ProductPreview key={product.id} {...product} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center text-reu-brown text-xl">Loading...</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <ProductPreview 
+                  key={product.id}
+                  product={product}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

@@ -9,8 +9,10 @@ Includes
  - user_service : Django with Restframework, cors-header, requests and Simple_JWT installed
  - product_service : Django with Restframework, cors-header, requests and Simple_JWT installed
  - data : PostgreSQL Database file
+
 ## Requirements
  - Docker and Docker-compose version 2.0+
+
 ## Getting Start
 
 To run this dokcer-compose template please folloiwng the instruction following
@@ -25,4 +27,46 @@ To run this dokcer-compose template please folloiwng the instruction following
   ```
   docker-compose up -d
   ```
->>>>>>> fd154cb (Clean start with proper .gitignore)
+
+## การติดตั้งและรันโปรเจค
+
+1. Clone โปรเจค:
+```bash
+git clone <repository-url>
+cd Re-U-Project
+```
+
+2. สร้างโฟลเดอร์ data:
+```bash
+mkdir -p data/db data/media
+```
+
+3. คัดลอกไฟล์รูปภาพ:
+- คัดลอกโฟลเดอร์ `data/media` จากเพื่อนร่วมทีมที่พัฒนาโปรเจค
+
+4. Import ข้อมูล:
+```bash
+# รัน Docker containers
+docker-compose up -d
+
+# Import ข้อมูล
+docker exec -i re-u-project-product_api-1 python manage.py loaddata product_data.json
+```
+
+5. เข้าถึงแอปพลิเคชัน:
+- Frontend: http://localhost:3343
+- Product API: http://localhost:3341
+- User API: http://localhost:3342
+- Auth API: http://localhost:3344
+- Database: localhost:5432
+
+## ข้อมูลสำหรับการเข้าสู่ระบบ
+
+- Username: cn334Admin
+- Password: cn334Admin
+
+## การเข้าถึง Admin Panel
+
+- Product Admin: http://localhost:3341/admin
+- User Admin: http://localhost:3342/admin
+- Auth Admin: http://localhost:3344/admin

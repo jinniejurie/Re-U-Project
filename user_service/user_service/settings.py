@@ -43,11 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
-    'rest_framework.authtoken',
-    'user_management',
-    'rest_framework',
-    'corsheaders',
-    'rest_framework_simplejwt'
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -89,12 +85,12 @@ WSGI_APPLICATION = 'user_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME', 'postgres'),
+        'USER': os.environ.get('POSTGRES_USER', 'cn334Admin'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'cn334Admin'),
         'HOST': 'db',
-        'PORT': 5432,
+        'PORT': '5432',
     }
 }
 
