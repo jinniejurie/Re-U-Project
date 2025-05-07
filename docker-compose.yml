@@ -7,6 +7,11 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=cn334Admin
       - POSTGRES_PASSWORD=cn334Admin
+<<<<<<< HEAD
+=======
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_HOST=172.20.10.3
+>>>>>>> c087e9fc85fdf32acb8144dfe99000d0eca9414b
     ports:
       - "5432:5432"
   product_api:
