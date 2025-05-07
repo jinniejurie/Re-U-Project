@@ -22,6 +22,5 @@ user_service/db.sqlite3
 *.pid
 *.sock
 
-<<<<<<< HEAD
-data/db
+data/db/
 
