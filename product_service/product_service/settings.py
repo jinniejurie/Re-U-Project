@@ -89,21 +89,10 @@ WSGI_APPLICATION = 'product_service.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'cn334Admin',
-        'PASSWORD': 'cn334Admin',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-=======
     'default': dj_database_url.config(
         default=config('DATABASE_URL'),
         conn_max_age=600,
     )
->>>>>>> c087e9fc85fdf32acb8144dfe99000d0eca9414b
 }
 
 
