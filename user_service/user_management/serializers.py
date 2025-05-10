@@ -12,10 +12,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'password', 'password2')
 
+    
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        try:
+            validate_password(attrs['password'])
+        except serializers.ValidationError as e:
+            raise serializers.ValidationError({"password": list(e.messages)})
         return attrs
+
 
     def create(self, validated_data):
         validated_data.pop('password2')

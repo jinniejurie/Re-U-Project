@@ -44,7 +44,7 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register/', {
+      const response = await fetch('http://localhost:3345/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,11 +59,24 @@ export default function Register() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.detail || 'Registration failed');
-      }
+        console.error('Registration error:', data);        
+        const messages = [];
+      
+        if (data.detail) {
+          messages.push(data.detail);
+        }
+      
+        for (const key in data) {
+          if (Array.isArray(data[key])) {
+            messages.push(`${key}: ${data[key].join(', ')}`);
+          }
+        }
+      
+        throw new Error(messages.join(' | ') || 'Registration failed');
+      }      
 
       // Auto-login after successful registration
-      const loginResponse = await fetch('http://localhost:8000/api/auth/login/', {
+      const loginResponse = await fetch('http://localhost:3345/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

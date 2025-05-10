@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const router = useRouter();
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(false);
   const [error, setError] = useState('');
@@ -15,13 +15,13 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login/', {
+      const response = await fetch('http://localhost:3345/api/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username_or_email: usernameOrEmail,
+          username: username,
           password: password,
         }),
       });
@@ -30,7 +30,7 @@ export default function Login() {
         throw new Error(data.detail || data.message || 'Login failed');
       }
       // Store token (for demo, use localStorage)
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.access);
       window.dispatchEvent(new Event('authChange'));
       router.push('/');
     } catch (err) {
@@ -49,16 +49,16 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="usernameOrEmail" className="block mb-2">
-                Username or Email
+              <label htmlFor="username" className="block mb-2">
+                Username
               </label>
               <input
-                id="usernameOrEmail"
+                id="username"
                 type="text"
-                value={usernameOrEmail}
-                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
-                placeholder="Enter your username or email"
+                placeholder="Enter your username"
               />
             </div>
 
