@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Inter, Unbounded } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
 const unbounded = Unbounded({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
 
 export default function Layout({ children }) {
@@ -22,15 +21,18 @@ export default function Layout({ children }) {
   const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
   const isProductPage = pathname === '/products';
   const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
+  const isAccountPage = pathname.startsWith('/account');
   
   // Determine header colors based on scroll position and page
-  const headerTextColor = isProductDetailPage 
-    ? 'text-reu-red' 
-    : isAuthPage || isCartOrCheckoutPage
-      ? 'text-reu-brown' 
-      : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+  const headerTextColor = isAccountPage
+    ? 'text-reu-brown'
+    : isProductDetailPage 
+      ? 'text-reu-red' 
+      : isAuthPage || isCartOrCheckoutPage
         ? 'text-reu-brown' 
-        : 'text-white';
+        : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+          ? 'text-reu-brown' 
+          : 'text-white';
   
   const headerHoverColor = isProductDetailPage 
     ? 'hover:text-reu-red/80' 
@@ -234,7 +236,7 @@ export default function Layout({ children }) {
               </div>
             </div>
             <div className={`flex-1 basis-0 flex items-center justify-center transform transition-transform duration-500 ${isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-              <Link href="/" className={`${headerTextColor} text-3xl font-medium ${headerHoverColor} transition-colors`}>
+              <Link href="/" className={`${isAccountPage ? 'text-reu-brown' : headerTextColor} text-3xl font-medium ${headerHoverColor} transition-colors`}>
                 Re:U
               </Link>
             </div>
