@@ -23,7 +23,7 @@ export default function RegisterSellerPage() {
     <div className="min-h-screen bg-reu-cream flex">
       <AccountSidebar active="sell" />
       <div className="flex-1 flex flex-col items-center justify-center px-2">
-        <section className="w-full max-w-3xl bg-[#FFF6D6] rounded-2xl px-8 py-10 mb-8 mt-16">
+        <section className="w-full max-w-4xl bg-[#FFF6D6] rounded-2xl px-8 py-10 mb-8 mt-16">
           <h1 className={`text-3xl md:text-4xl font-bold text-[#fa6a5b] text-center mb-2 tracking-tight ${unbounded.className}`}>Before You Start Selling</h1>
           <h2 className={`text-lg md:text-xl font-semibold text-reu-brown text-center mb-4 ${unbounded.className}`}>A Little Something from Us</h2>
           <div className="w-16 h-1 bg-[#fa6a5b] rounded mx-auto mb-6" />
@@ -46,6 +46,7 @@ export default function RegisterSellerPage() {
             <span className="font-bold text-[#fa6a5b]">คุณมาถูกที่แล้ว</span>
           </p>
           <p className="text-reu-brown text-base md:text-lg text-center font-semibold">พร้อมจะส่งต่อหรือยัง?</p>
+        
         </section>
         <form onSubmit={handleRegister} className="w-full max-w-2xl flex flex-col items-center gap-6">
           <div className="flex items-center gap-3">

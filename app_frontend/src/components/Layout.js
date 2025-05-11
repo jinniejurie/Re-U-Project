@@ -187,6 +187,16 @@ export default function Layout({ children }) {
 
               <li>
                 <Link
+                  href="/dashboard"
+                  onClick={() => setIsSideNavOpen(false)}
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  Dashboard
+                </Link>
+                </li>
+                
+                <li>
+                <Link
                   href="/about"
                   onClick={() => setIsSideNavOpen(false)}
                   className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
@@ -195,15 +205,6 @@ export default function Layout({ children }) {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  href="/contact"
-                  onClick={() => setIsSideNavOpen(false)}
-                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>
