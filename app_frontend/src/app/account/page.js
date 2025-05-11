@@ -1,12 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
-<<<<<<< HEAD
-import { useState, useEffect } from 'react';
-import { getValidAccessToken } from '@/utils/auth';
-=======
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
+import AccountSidebar from '@/components/AccountSidebar';
 
 export default function AccountPage() {
   const router = useRouter();
@@ -19,13 +14,8 @@ export default function AccountPage() {
     photo: null,
   });
   const [error, setError] = useState('');
-<<<<<<< HEAD
-  const [loading, setLoading] = useState(true);
-
-=======
   const [photoPreview, setPhotoPreview] = useState(null);
   const fileInputRef = useRef();
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -36,14 +26,11 @@ export default function AccountPage() {
 
   
   useEffect(() => {
-<<<<<<< HEAD
-=======
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
       return;
     }
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
     const fetchUserData = async () => {
       try {
         const token = await getValidAccessToken(); // ใช้ฟังก์ชันในการเช็คและดึง access token
@@ -55,10 +42,7 @@ export default function AccountPage() {
           },
         });
         const data = await response.json();
-<<<<<<< HEAD
 
-=======
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
         if (response.ok) {
           setUserData(prev => ({
             ...prev,
@@ -77,11 +61,6 @@ export default function AccountPage() {
     fetchUserData();
   }, [router]);
 
-<<<<<<< HEAD
-  if (loading) {
-    return <div className="text-center">Loading...</div>;
-  }
-=======
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -100,33 +79,11 @@ export default function AccountPage() {
     // TODO: Implement save logic (API call)
     alert('Changes saved (not really, this is a placeholder)!');
   };
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
 
   return (
     <div className="min-h-screen bg-reu-cream flex">
       {/* Sidebar */}
-      <aside className="w-72 bg-[#FFF6D6] flex flex-col justify-between py-8 px-6 h-screen border-r border-reu-brown/10 mt-0">
-        <nav className="flex flex-col gap-4">
-          <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-brown/10 transition-colors mt-10">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6" /></svg>
-            Dashboard
-          </Link>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-reu-brown text-white font-semibold cursor-default">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              Account Settings
-            </div>
-            <Link href="/register-seller" className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-brown/10 transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-              Sell with us
-            </Link>
-          </div>
-        </nav>
-        <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-red/10 hover:text-reu-red transition-colors mt-8">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
-          Log Out
-        </button>
-      </aside>
+      <AccountSidebar active="account" />
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center">
         <div className="container mx-auto px-4 pt-12 pb-8">

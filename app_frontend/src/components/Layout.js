@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Inter, Unbounded } from "next/font/google";
+import AccountSidebar from '@/components/AccountSidebar';
 
 const unbounded = Unbounded({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
 
@@ -25,21 +26,7 @@ export default function Layout({ children }) {
   const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
   const isProductPage = pathname === '/products';
   const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
-<<<<<<< HEAD
-
-  // Determine header colors based on scroll position and page
-  const headerTextColor = isProductDetailPage
-    ? 'text-reu-red'
-    : isAuthPage || isCartOrCheckoutPage
-      ? 'text-reu-brown'
-      : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
-        ? 'text-reu-brown'
-        : 'text-white';
-
-  const headerHoverColor = isProductDetailPage
-    ? 'hover:text-reu-red/80'
-=======
-  const isAccountPage = pathname.startsWith('/account');
+  const isAccountPage = pathname.startsWith('/account') || pathname.startsWith('/register-seller');
   
   // Determine header colors based on scroll position and page
   const headerTextColor = isAccountPage
@@ -54,7 +41,6 @@ export default function Layout({ children }) {
   
   const headerHoverColor = isProductDetailPage 
     ? 'hover:text-reu-red/80' 
->>>>>>> cfa6ccb8a99f3c2cebcfa63dc80177c44f609e2c
     : isAuthPage || isCartOrCheckoutPage
       ? 'hover:text-reu-red'
       : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
