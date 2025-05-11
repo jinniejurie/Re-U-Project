@@ -23,21 +23,19 @@ export default function CartPage() {
   };
 
   const handleUpdateQuantity = (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
-
     const updatedCart = cart.map(item => {
       if (item.product_id === itemId) {
         return { ...item, quantity: newQuantity };
       }
       return item;
-    });
+    }).filter(item => item.quantity > 0);
 
     setCart(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
   const getTotal = () => {
-    return cart.reduce((total, item) => total + (item.product_price * item.quantity), 0);
+    return cart.reduce((total, item) => total + item.product_price, 0);
   };
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
@@ -64,7 +62,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-reu-cream">
       <div className="container mx-auto px-4 pt-32 pb-16">
         <h1 className="text-4xl font-bold text-reu-brown text-center mb-12">Your Cart</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
@@ -84,19 +82,6 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center border rounded">
-                    <button
-                      onClick={() => handleUpdateQuantity(item.product_id, item.quantity - 1)}
-                      className="px-3 py-1 hover:bg-gray-100"
-                    >
-                      -
-                    </button>
-                    <span className="px-3 py-1">{item.quantity}</span>
-                    <button
-                      onClick={() => handleUpdateQuantity(item.product_id, item.quantity + 1)}
-                      className="px-3 py-1 hover:bg-gray-100"
-                    >
-                      +
-                    </button>
                   </div>
                   <button
                     onClick={() => handleRemoveItem(item.product_id)}

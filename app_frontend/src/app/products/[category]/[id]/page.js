@@ -58,14 +58,16 @@ export default function ProductDetail() {
       
       // Save updated cart to localStorage
       localStorage.setItem('cart', JSON.stringify(existingCart));
-      alert('Product added to cart successfully!');
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add product to cart. Please try again.');
-    } finally {
-      setAddingToCart(false);
-    }
-  };
+      
+      // 🔁 Navigate to cart page after successful add
+    router.push('/cart');
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    alert('Failed to add product to cart. Please try again.');
+  } finally {
+    setAddingToCart(false);
+  }
+};
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
   if (!product || product.error) return <div className="text-center py-10 text-red-600">Product not found.</div>;

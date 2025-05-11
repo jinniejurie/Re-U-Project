@@ -16,14 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from product_management import views
+from product_management import views as product_views  
+from order_management import views as order_views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('products/', views.get_all_products, name='get_all_products'),
-    path('products/<str:category_name>/', views.get_products_by_category, name='get_products_by_category'),
-    path('products/<str:category_name>/<int:product_id>/', views.get_product_by_id, name='get_product_by_id'),
+    path('products/', product_views.get_all_products, name='get_all_products'),
+    path('products/<str:category_name>/', product_views.get_products_by_category, name='get_products_by_category'),
+    path('products/<str:category_name>/<int:product_id>/', product_views.get_product_by_id, name='get_product_by_id'),
+    path('api/orders/', order_views.OrderCreateView.as_view(), name='order-create'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

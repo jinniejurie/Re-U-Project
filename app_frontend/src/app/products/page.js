@@ -28,6 +28,7 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
   const category = searchParams.get('category');
 
   useEffect(() => {
@@ -42,7 +43,13 @@ export default function Products() {
           throw new Error('Failed to fetch products');
         }
         const data = await response.json();
-        setProducts(data);
+
+        const filteredProducts = data.filter(product => 
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          product.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        setProducts(filteredProducts);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -51,7 +58,7 @@ export default function Products() {
     };
 
     fetchProducts();
-  }, [category]);
+  }, [category, searchQuery]);
 
   if (loading) {
     return (
