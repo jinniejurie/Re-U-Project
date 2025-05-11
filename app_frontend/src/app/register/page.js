@@ -44,11 +44,13 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost:3345/register/', {
+      const response = await fetch('http://localhost:3345/api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           username: formData.username,
           email: formData.email,
@@ -76,13 +78,15 @@ export default function Register() {
       }      
 
       // Auto-login after successful registration
-      const loginResponse = await fetch('http://localhost:3345/login/', {
+      const loginResponse = await fetch('http://localhost:3345/api/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
-          username_or_email: formData.username,
+          username: formData.username,
           password: formData.password,
         }),
       });
