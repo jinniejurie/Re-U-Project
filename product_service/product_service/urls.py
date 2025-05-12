@@ -20,6 +20,12 @@ from product_management import views as product_views
 from order_management import views as order_views
 from django.conf import settings
 from django.conf.urls.static import static
+from product_management.views import (
+    CategoryViewSet,
+    ProductViewSet,
+    SellerProductsView,
+    ProductDetailView
+)
 
 
 urlpatterns = [
@@ -28,4 +34,8 @@ urlpatterns = [
     path('products/<str:category_name>/', product_views.get_products_by_category, name='get_products_by_category'),
     path('products/<str:category_name>/<int:product_id>/', product_views.get_product_by_id, name='get_product_by_id'),
     path('api/orders/', order_views.OrderCreateView.as_view(), name='order-create'),
+    path('api/products/categories/', CategoryViewSet.as_view({'get': 'list'})),
+    path('api/products/', ProductViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('api/products/seller/', SellerProductsView.as_view()),
+    path('api/products/<int:pk>/', ProductDetailView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
