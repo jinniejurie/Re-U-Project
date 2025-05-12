@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import AccountSidebar from '@/components/AccountSidebar';
 
 export default function AccountPage() {
   const router = useRouter();
@@ -16,7 +16,6 @@ export default function AccountPage() {
   const [error, setError] = useState('');
   const [photoPreview, setPhotoPreview] = useState(null);
   const fileInputRef = useRef();
-  const [loading, setLoading] = useState(true);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -132,23 +131,32 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-reu-cream flex">
-      {loading ? (
-        <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-reu-red"></div>
-        </div>
-      ) : (
-        <div className="min-h-screen bg-reu-cream flex">
-          {/* Sidebar */}
-          <aside className="w-72 bg-[#FFF6D6] flex flex-col justify-between py-8 px-6 h-screen border-r border-reu-brown/10 mt-0">
-            <nav className="flex flex-col gap-4">
-              <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-brown/10 transition-colors mt-10">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6" /></svg>
-                Dashboard
-              </Link>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-reu-brown text-white font-semibold cursor-default">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                  Account Settings
+      {/* Sidebar */}
+      <AccountSidebar active="account" />
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="container mx-auto px-4 pt-12 pb-8">
+          <div className="flex flex-col md:flex-row items-stretch gap-12 max-w-5xl mx-auto">
+            {/* Profile Photo Card */}
+            <div className="bg-white rounded-2xl shadow p-10 flex flex-col justify-center items-center w-full max-w-xs border border-gray-200 h-full">
+              <div className="relative w-64 h-64 mb-4">
+                <img
+                  src={photoPreview || '/default-profile.png'}
+                  alt="Profile Preview"
+                  className="w-full h-full object-cover rounded-xl border"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  ref={fileInputRef}
+                  onChange={handlePhotoChange}
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-40 text-white text-center py-2 rounded-b-xl cursor-pointer" onClick={() => fileInputRef.current.click()}>
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" /></svg>
+                    Upload Photo
+                  </span>
                 </div>
                 <Link href="/register-seller" className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-brown/10 transition-colors">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>

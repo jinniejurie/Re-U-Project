@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Inter, Unbounded } from "next/font/google";
+import AccountSidebar from '@/components/AccountSidebar';
 
 const unbounded = Unbounded({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
 
@@ -25,7 +26,11 @@ export default function Layout({ children }) {
   const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
   const isProductPage = pathname === '/products';
   const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
+<<<<<<< HEAD
   const isAccountPage = pathname.startsWith('/account');
+=======
+  const isAccountPage = pathname.startsWith('/account') || pathname.startsWith('/register-seller');
+>>>>>>> ec31dd56167675378e38a7c849e994da0285a364
   
   // Determine header colors based on scroll position and page
   const headerTextColor = isAccountPage
@@ -186,6 +191,16 @@ export default function Layout({ children }) {
 
               <li>
                 <Link
+                  href="/dashboard"
+                  onClick={() => setIsSideNavOpen(false)}
+                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
+                >
+                  Dashboard
+                </Link>
+                </li>
+                
+                <li>
+                <Link
                   href="/about"
                   onClick={() => setIsSideNavOpen(false)}
                   className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
@@ -194,15 +209,6 @@ export default function Layout({ children }) {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  href="/contact"
-                  onClick={() => setIsSideNavOpen(false)}
-                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>
