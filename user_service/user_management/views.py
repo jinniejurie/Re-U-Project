@@ -45,7 +45,8 @@ class AccountView(APIView):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'phone': profile.phone,
-                'photo': profile.profile_picture.url if profile.profile_picture else None
+                'photo': profile.profile_picture.url if profile.profile_picture else None,
+                'is_seller': profile.is_seller
             }
         }, status=status.HTTP_200_OK)
 
@@ -65,6 +66,8 @@ class AccountView(APIView):
             profile.phone = data['phone']
         if 'photo' in request.FILES:
             profile.profile_picture = request.FILES['photo']
+        if 'is_seller' in data:
+            profile.is_seller = data['is_seller']
         
         user.save()
         profile.save()
@@ -76,9 +79,32 @@ class AccountView(APIView):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'phone': profile.phone,
-                'photo': profile.profile_picture.url if profile.profile_picture else None
+                'photo': profile.profile_picture.url if profile.profile_picture else None,
+                'is_seller': profile.is_seller
             }
         }, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            user = request.user
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.is_seller = True
+            profile.save()
+            
+            return Response({
+                'message': 'Successfully registered as seller',
+                'user': {
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'phone': profile.phone,
+                    'photo': profile.profile_picture.url if profile.profile_picture else None,
+                    'is_seller': profile.is_seller
+                }
+            })
+        except Exception as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CartView(APIView):

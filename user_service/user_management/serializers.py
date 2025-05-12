@@ -15,8 +15,8 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=False)
     
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'phone']
+        model = UserProfile
+        fields = ['phone', 'profile_picture', 'is_seller']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])

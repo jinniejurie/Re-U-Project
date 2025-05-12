@@ -12,11 +12,32 @@ const unbounded = Unbounded({
 export default function RegisterSellerPage() {
   const [agreed, setAgreed] = useState(false);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (!agreed) return;
-    // TODO: Implement seller registration logic
-    alert('Registered as a seller! (placeholder)');
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:3345/api/account/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ is_seller: true })
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || 'Failed to register as seller');
+      }
+  
+      alert('Registered as a seller!');
+      window.location.href = '/account'; // Redirect to account page after successful registration
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Error: Could not register as seller.');
+    }
   };
 
   return (
