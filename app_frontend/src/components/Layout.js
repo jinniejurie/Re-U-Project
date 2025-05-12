@@ -26,11 +26,7 @@ export default function Layout({ children }) {
   const isProductDetailPage = pathname.includes('/products/') && pathname.split('/').length > 3;
   const isProductPage = pathname === '/products';
   const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
-<<<<<<< HEAD
-  const isAccountPage = pathname.startsWith('/account');
-=======
   const isAccountPage = pathname.startsWith('/account') || pathname.startsWith('/register-seller');
->>>>>>> ec31dd56167675378e38a7c849e994da0285a364
   
   // Determine header colors based on scroll position and page
   const headerTextColor = isAccountPage
