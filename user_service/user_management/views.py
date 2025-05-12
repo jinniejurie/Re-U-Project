@@ -2,12 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import RegisterSerializer, LoginSerializer, CartSerializer, CartItemSerializer
+from .serializers import RegisterSerializer, CartSerializer, CartItemSerializer, UserProfileSerializer, UserProfileUpdateSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .models import Cart, CartItem
+from .models import Cart, CartItem, UserProfile
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+
 
 # Create your views here.
 
@@ -34,13 +36,48 @@ class AccountView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
+        profile, created = UserProfile.objects.get_or_create(user=user)
+        
         return Response({
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-            },
-            "message": "User data retrieved successfully"
+            'user': {
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'phone': profile.phone,
+                'photo': profile.profile_picture.url if profile.profile_picture else None
+            }
+        }, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        profile, created = UserProfile.objects.get_or_create(user=user)
+        data = request.data
+
+        # อัพเดทข้อมูลใน User model
+        if 'first_name' in data:
+            user.first_name = data['first_name']
+        if 'last_name' in data:
+            user.last_name = data['last_name']
+        
+        # อัพเดทข้อมูลใน UserProfile
+        if 'phone' in data:
+            profile.phone = data['phone']
+        if 'photo' in request.FILES:
+            profile.profile_picture = request.FILES['photo']
+        
+        user.save()
+        profile.save()
+
+        return Response({
+            'user': {
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'phone': profile.phone,
+                'photo': profile.profile_picture.url if profile.profile_picture else None
+            }
         }, status=status.HTTP_200_OK)
 
 

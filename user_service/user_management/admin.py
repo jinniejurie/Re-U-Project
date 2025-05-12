@@ -1,9 +1,25 @@
 from django.contrib import admin
-from .models import Customer
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from .models import UserProfile
 
-@admin.register(Customer)
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fields = ('phone', 'profile_picture')
+
+class UserProfileAdmin(UserAdmin):
+    inlines = (UserProfileInline,)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
+    ordering = ('username',)
+
+admin.site.unregister(User)
+admin.site.register(User, UserProfileAdmin)
+
+@admin.register(UserProfile)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_seller', 'date_joined')
-    list_filter = ('is_seller', 'date_joined')
-    search_fields = ('email', 'first_name', 'last_name', 'phone_number')
-    ordering = ('-date_joined',)
+    list_display = ['user', 'username', 'email', 'first_name', 'last_name', 'phone']
+    search_fields = ['user__username', 'user__email', 'user__first_name', 'user__last_name', 'phone']
+    ordering = ['user__username']

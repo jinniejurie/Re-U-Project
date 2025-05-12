@@ -2,7 +2,21 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
-from .models import Cart, CartItem
+from .models import Cart, CartItem, UserProfile
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(source='profile.phone', required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'phone']
+
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(required=False)
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -57,7 +71,7 @@ class LoginSerializer(serializers.Serializer):
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['id', 'product_id', 'product_name', 'product_price', 'added_at']
+        fields = ['id', 'product_id', 'product_name', 'product_price', 'quantity', 'added_at']
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
