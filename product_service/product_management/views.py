@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-# Create your views here.
 def get_all_products(request):
     products = Product.objects.all()
     data = [

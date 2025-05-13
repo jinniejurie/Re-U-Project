@@ -73,8 +73,6 @@ export default function Home() {
     fetchFeaturedProducts();
   }, []);
 
-
-  // Mock data for categories
   const categories = [
     {
       title: "Clothing",

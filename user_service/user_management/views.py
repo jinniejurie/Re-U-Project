@@ -60,13 +60,11 @@ class AccountView(APIView):
         profile, created = UserProfile.objects.get_or_create(user=user)
         data = request.data
 
-        # อัพเดทข้อมูลใน User model
         if 'first_name' in data:
             user.first_name = data['first_name']
         if 'last_name' in data:
             user.last_name = data['last_name']
         
-        # อัพเดทข้อมูลใน UserProfile
         if 'phone' in data:
             profile.phone = data['phone']
         if 'is_seller' in data:

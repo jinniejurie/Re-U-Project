@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Inter, Unbounded } from "next/font/google";
-import AccountSidebar from '@/components/AccountSidebar';
+import { Unbounded } from "next/font/google";
 
 const unbounded = Unbounded({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
 
@@ -28,7 +27,6 @@ export default function Layout({ children }) {
   const isCartOrCheckoutPage = pathname === '/cart' || pathname === '/checkout';
   const isAccountPage = pathname.startsWith('/account') || pathname.startsWith('/register-seller');
   
-  // Determine header colors based on scroll position and page
   const headerTextColor = isAccountPage
     ? 'text-reu-brown'
     : isProductDetailPage 
@@ -47,7 +45,6 @@ export default function Layout({ children }) {
         ? 'hover:text-reu-red/80'
         : 'hover:text-reu-cream';
 
-  // Add categories data
   const categories = [
     { title: "Clothing", link: "/products/clothing" },
     { title: "Accessories", link: "/products/accessories" },
@@ -64,15 +61,12 @@ export default function Layout({ children }) {
       if (typeof window !== 'undefined') {
         const currentScrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
-
-        // Check if we're in the collection section (approximately after one viewport height)
+        
         setIsCollectionSection(currentScrollY >= viewportHeight * 0.8);
 
         if (currentScrollY > lastScrollY) {
-          // Scrolling down
           setIsHeaderVisible(false);
         } else {
-          // Scrolling up
           setIsHeaderVisible(true);
         }
 
@@ -200,7 +194,7 @@ export default function Layout({ children }) {
         </div>
       </div>
 
-      {/* Search Overlay */}
+      {/* Search */}
       <div className={`fixed inset-0 z-50 transition-opacity duration-500 ${isSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-reu-cream">
           <div className="h-20 flex items-center justify-start px-4">

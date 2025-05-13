@@ -7,9 +7,8 @@ from .serializers import OrderSerializer, CartSerializer, CartItemSerializer
 from .models import Order, Cart, CartItem, OrderItem
 from rest_framework.views import APIView
 from rest_framework import status
-from product_management.models import Product  # Import the Product model
+from product_management.models import Product  
 
-# Create your views here.
 class OrderCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -37,7 +36,6 @@ class SellerOrdersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Get all orders where the products were created by the seller
         seller_products = Product.objects.filter(created_by=request.user)
         orders = Order.objects.filter(items__product__in=seller_products).distinct()
         serializer = OrderSerializer(orders, many=True)
@@ -47,7 +45,6 @@ class BuyerOrdersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Get all orders created by the buyer
         orders = Order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)

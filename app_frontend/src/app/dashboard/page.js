@@ -1,21 +1,5 @@
 "use client";
 import { useEffect, useState } from 'react';
-import AccountSidebar from '@/components/AccountSidebar';
-
-const mockSellerOrders = [
-  { id: '00001', name: 'Christine Brooks', address: 'โรงอาหารริน', date: '04 Sep 2019', type: 'Electric', status: 'Completed' },
-  { id: '00002', name: 'Rosie Pearson', address: 'โรงอาหารริน', date: '28 May 2019', type: 'Book', status: 'Processing' },
-  { id: '00003', name: 'Darrell Caldwell', address: 'โรงอาหารริน', date: '23 Nov 2019', type: 'Medicine', status: 'Refund' },
-  { id: '00004', name: 'Gilbert Johnston', address: 'โรงอาหารริน', date: '05 Feb 2019', type: 'Mobile', status: 'Completed' },
-  { id: '00005', name: 'Alan Cain', address: 'โรงอาหารริน', date: '29 Jul 2019', type: 'Watch', status: 'Processing' },
-  { id: '00006', name: 'Alfred Murray', address: 'F5', date: '15 Aug 2019', type: 'Medicine', status: 'Completed' },
-];
-
-const mockBuyerOrders = [
-  { id: '92287157', name: 'Just top', image: '/images/clothing-category.avif', status: 'Delivered' },
-  { id: '92287157', name: 'Just top', image: '/images/books-category.jpg', status: 'Shipping' },
-  { id: '92287157', name: 'Just top', image: '/images/stationary-category.jpg', status: 'Cancelled' },
-];
 
 const statusColor = {
   Completed: 'bg-green-100 text-green-700',
