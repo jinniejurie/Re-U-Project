@@ -270,7 +270,7 @@ export default function SellProductsPage() {
                   <li key={product.id} className="flex items-center gap-4 py-4">
                     {product.image && (
                       <img
-                        src={product.image}
+                        src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
                         alt={product.name}
                         className="w-16 h-16 object-cover rounded-lg border"
                       />

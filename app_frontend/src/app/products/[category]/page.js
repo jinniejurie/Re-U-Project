@@ -10,7 +10,7 @@ const ProductCard = ({ image, title, price, id, category }) => (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={image || "/placeholder-product.jpg"} 
+          src={image ? (image.startsWith('http') ? image : `http://localhost:3344${image.startsWith('/') ? '' : '/media/'}${image}`) : '/placeholder-product.jpg'}
           alt={title} 
           className="object-cover w-full h-full"
         />
