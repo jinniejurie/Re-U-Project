@@ -57,7 +57,7 @@ class CartView(APIView):
 
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
-        serializer = CartSerializer(cart)
+        serializer = CartSerializer(cart, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
 
     def post(self, request):
@@ -66,7 +66,7 @@ class CartView(APIView):
         existing_item = cart.items.filter(product_id=product_id).first()
         if existing_item:
             return JsonResponse({'error': 'Product already in cart'}, status=400)
-        serializer = CartItemSerializer(data=request.data)
+        serializer = CartItemSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(cart=cart)
         else:

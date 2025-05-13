@@ -32,12 +32,18 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product = ProductSerializer(read_only=True, context={'request': None})
     product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product', write_only=True)
 
     class Meta:
         model = CartItem
         fields = ['id', 'product', 'product_id', 'added_at']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request', None)
+        if request:
+            self.fields['product'].context['request'] = request
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
@@ -48,4 +54,10 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ['id', 'items', 'total', 'created_at', 'updated_at']
 
     def get_total(self, obj):
-        return sum(item.product.price for item in obj.items.all()) 
+        return sum(item.product.price for item in obj.items.all())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request', None)
+        if request:
+            self.fields['items'].child.context['request'] = request 

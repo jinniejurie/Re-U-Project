@@ -27,6 +27,11 @@ export default function CartPage() {
           throw new Error('Failed to fetch cart');
         }
         const data = await response.json();
+        console.log('Cart API Response:', data);
+        console.log('Cart Items:', data.items);
+        if (data.items && data.items.length > 0) {
+          console.log('First Item Product:', data.items[0].product);
+        }
         setCart(data);
       } catch (err) {
         setError(err.message);

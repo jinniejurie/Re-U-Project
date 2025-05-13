@@ -196,7 +196,7 @@ export default function Home() {
             <div className="text-center text-reu-brown text-xl">Loading...</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featuredProducts.slice(0, 8).map((product) => (
+              {featuredProducts.map((product) => (
                 <ProductPreview 
                   key={product.id}
                   product={product}
