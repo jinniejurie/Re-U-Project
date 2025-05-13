@@ -57,6 +57,7 @@ export default function Checkout() {
       notes: form.notes,
       status: 'pending',
       items: cartItems.map(i => ({
+        product_id: i.product_id,
         product_name: i.product_name,
         price: i.product_price
       })),
