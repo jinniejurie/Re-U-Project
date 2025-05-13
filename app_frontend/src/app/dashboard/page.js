@@ -170,7 +170,16 @@ function CombinedSidebar({ isSeller, active, setActive }) {
           {/* Add more buyer menu items here */}
         </div>
       </nav>
-      <button onClick={() => { localStorage.removeItem('token'); window.location.href = '/'; window.dispatchEvent(new Event('authChange')); }} className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-red/10 hover:text-reu-red transition-colors mt-8">
+      <button
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+            window.dispatchEvent(new Event('authChange'));
+          }
+        }}
+        className="flex items-center gap-3 px-4 py-3 rounded-lg text-reu-brown font-semibold hover:bg-reu-red/10 hover:text-reu-red transition-colors mt-8"
+      >
         Log out
       </button>
     </aside>
@@ -183,17 +192,19 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchUser() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        window.location.href = '/login';
-        return;
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/login';
+          return;
+        }
+        const res = await fetch('http://localhost:3345/api/account/', {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setUser(data.user);
+        if (data.user.is_seller) setActive('seller-orders');
       }
-      const res = await fetch('http://localhost:3345/api/account/', {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setUser(data.user);
-      if (data.user.is_seller) setActive('seller-orders');
     }
     fetchUser();
   }, []);
