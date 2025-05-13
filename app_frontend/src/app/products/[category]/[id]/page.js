@@ -17,7 +17,7 @@ export default function ProductDetail() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`http://localhost:3344/products/${category}/${id}/`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${category}/${id}/`);
         const data = await res.json();
         setProduct(data);
       } catch (error) {
@@ -40,7 +40,7 @@ export default function ProductDetail() {
         router.push('/login');
         return;
       }
-      const response = await fetch('http://localhost:3344/api/cart/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function ProductDetail() {
             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
               <div className="aspect-square relative">
                 <img 
-                  src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/'}${product.image}`) : '/placeholder-product.jpg'}
+                  src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`) : '/placeholder-product.jpg'}
                   alt={product.name}
                   className="object-cover w-full h-full"
                   crossOrigin="anonymous"

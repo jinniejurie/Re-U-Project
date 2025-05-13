@@ -27,7 +27,7 @@ const ProductPreview = ({ product }) => (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
+          src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
           alt={product.name}
           className="object-cover w-full h-full"
         />
@@ -53,7 +53,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchFeaturedProducts() {
       try {
-        const response = await fetch('http://localhost:3344/products/');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`);
         if (!response.ok) {
           throw new Error('Failed to fetch featured products');
         }

@@ -35,7 +35,7 @@ function SellerOrderList() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3344/api/orders/seller/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/seller/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -100,7 +100,7 @@ function BuyerOrderHistory() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3344/api/orders/buyer/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/buyer/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

@@ -10,7 +10,7 @@ const ProductCard = ({ image, title, price, id, category }) => (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={image ? (image.startsWith('http') ? image : `http://localhost:3344${image.startsWith('/') ? '' : '/media/'}${image}`) : '/placeholder-product.jpg'}
+          src={image ? (image.startsWith('http') ? image : `${process.env.NEXT_PUBLIC_API_URL}${image.startsWith('/') ? '' : '/media/'}${image}`) : '/placeholder-product.jpg'}
           alt={title} 
           className="object-cover w-full h-full"
         />
@@ -45,7 +45,7 @@ export default function CategoryPage() {
     const fetchProducts = async () => {
       try {
         const backendCategory = categorySlugToName[category] || category;
-        const response = await fetch(`http://localhost:3344/products/${backendCategory}/`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${backendCategory}/`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
+          src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
           alt={product.name} 
           className="object-cover w-full h-full"
         />
@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => (
   </Link>
 );
 
-export default function Products() {
+function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,8 +35,8 @@ export default function Products() {
     const fetchProducts = async () => {
       try {
         const url = category 
-          ? `http://localhost:3344/products/${category}/`
-          : 'http://localhost:3344/products/';
+          ? `${process.env.NEXT_PUBLIC_API_URL}/products/${category}/`
+          : `${process.env.NEXT_PUBLIC_API_URL}/products/`;
         
         const response = await fetch(url);
         if (!response.ok) {
@@ -109,5 +109,13 @@ export default function Products() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function ProductsPageWrapper() {
+  return (
+    <Suspense>
+      <Products />
+    </Suspense>
   );
 } 
