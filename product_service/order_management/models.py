@@ -1,11 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from product_management.models import Product  # Import the Product model
 
 
 from django.db import models
 
+# link order to user
 class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
     email = models.EmailField(max_length=255, default='')
     first_name = models.CharField(max_length=100, default='')
     last_name = models.CharField(max_length=100, default='')
@@ -26,6 +29,7 @@ class Order(models.Model):
     def __str__(self):
         return f"Order {self.id} - {self.first_name} {self.last_name}"
 
+# link order to product
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255, default='')

@@ -13,12 +13,13 @@ export default function Checkout() {
     firstName: '',
     lastName: '',
     phone: '',
-    deliveryType: '',
+    deliveryType: 'pickup',
     meetingLocation: '',
     preferredDate: '',
     preferredTime: '',
     notes: '',
   });
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('cart');
@@ -65,7 +66,7 @@ export default function Checkout() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`, // ถ้าใช้ JWT
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(payload),
     })
@@ -76,9 +77,7 @@ export default function Checkout() {
       return JSON.parse(text);
     })
     .then(data => {
-      alert(`Order confirmed!`);
-      localStorage.removeItem('cart');
-      router.push('/');
+      setShowModal(true);
     })
     .catch(err => {
       console.error('Order failed:', err);
@@ -86,8 +85,30 @@ export default function Checkout() {
     });
   };
 
+  const handleModalClose = () => {
+    localStorage.removeItem('cart');
+    setShowModal(false);
+    router.push('/');
+  };
+
   return (
     <div className="min-h-screen bg-reu-cream flex items-center justify-center">
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full flex flex-col items-center">
+            <div className="text-3xl mb-4 text-green-600">✔️</div>
+            <h2 className="text-xl font-bold mb-2 text-reu-brown">Order Confirmed!</h2>
+            <p className="mb-6 text-center text-reu-brown">Thank you for your order.<br/>We will contact you soon.</p>
+            <button
+              onClick={handleModalClose}
+              className="px-6 py-2 rounded-xl bg-reu-red text-white font-semibold text-lg shadow hover:bg-[#e65c4d] transition-colors"
+            >
+              Go to Home
+            </button>
+          </div>
+        </div>
+      )}
       <div className="w-full max-w-6xl h-[700px] bg-transparent flex flex-col md:flex-row items-stretch justify-center shadow-none">
         {/* Left: Form */}
         <form onSubmit={handleSubmit}
@@ -123,20 +144,21 @@ export default function Checkout() {
               <select name="deliveryType" value={form.deliveryType} onChange={handleChange}
                 className="rounded-xl border border-gray-300 px-4 py-3 w-full focus:border-reu-red focus:ring-2 focus:ring-reu-red outline-none"
               >
-                <option value="">รับเองที่จุดนัดพบ</option>
+                <option value="pickup">รับเองที่จุดนัดพบ</option>
                 <option value="delivery">Delivery</option>
               </select>
             </div>
 
             <div>
               <h2 className="text-2xl font-bold text-reu-red mb-4">Delivery Detail</h2>
-              <select name="meetingLocation" value={form.meetingLocation} onChange={handleChange}
+              <input
+                type="text"
+                name="meetingLocation"
+                value={form.meetingLocation}
+                onChange={handleChange}
+                placeholder="Enter meeting location"
                 className="rounded-xl border border-gray-300 px-4 py-3 w-full focus:border-reu-red focus:ring-2 focus:ring-reu-red outline-none"
-              >
-                <option value="">Meeting Location</option>
-                <option value="location1">Location 1</option>
-                <option value="location2">Location 2</option>
-              </select>
+              />
             </div>
 
             <div>

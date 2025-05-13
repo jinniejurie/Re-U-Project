@@ -5,23 +5,24 @@ from rest_framework.response import Response
 from django.views import View
 from .serializers import OrderSerializer, CartSerializer, CartItemSerializer
 from .models import Order, Cart, CartItem
+from rest_framework.views import APIView
+from rest_framework import status
+from product_management.models import Product  # Import the Product model
 
 # Create your views here.
-class OrderCreateView(View):
+class OrderCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        serializer = OrderSerializer(data=request.POST)
-        
+        serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
-            order = serializer.save()
-            return JsonResponse({
+            order = serializer.save(user=request.user)
+            return Response({
                 'message': 'Order created successfully!',
                 'order_id': order.id
-            }, status=201)
+            }, status=status.HTTP_201_CREATED)
         else:
-            # ส่งข้อผิดพลาดกลับ
-            return JsonResponse({
-                'errors': serializer.errors
-            }, status=400)
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
             
 class CartView(View):
     permission_classes = [IsAuthenticated]
