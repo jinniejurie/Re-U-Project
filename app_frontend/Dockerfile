@@ -12,11 +12,10 @@ RUN \
 
 COPY . .
 
-RUN npm run build
-
 EXPOSE 3000
 
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["npm", "start"]
+# Build at container startup, not at image build time!
+CMD ["sh", "-c", "npm run build && npm start"]
