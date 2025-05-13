@@ -12,6 +12,7 @@ const CategoryCard = ({ title, image, link }) => (
         src={image}
         alt={title}
         fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         className="object-cover group-hover:scale-105 transition-transform duration-300"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
@@ -195,7 +196,7 @@ export default function Home() {
             <div className="text-center text-reu-brown text-xl">Loading...</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featuredProducts.map((product) => (
+              {featuredProducts.slice(0, 8).map((product) => (
                 <ProductPreview 
                   key={product.id}
                   product={product}
