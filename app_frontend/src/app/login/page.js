@@ -44,7 +44,7 @@ export default function Login() {
         <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-lg p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-medium mb-4">Login to Account</h1>
-            <p className="text-gray-600">Please enter your email and password to continue</p>
+            <p className="text-gray-600">Please enter your username and password to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -76,19 +76,6 @@ export default function Login() {
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-reu-red"
                 placeholder="••••••"
               />
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                checked={rememberPassword}
-                onChange={(e) => setRememberPassword(e.target.checked)}
-                className="h-4 w-4 text-reu-red focus:ring-reu-red border-gray-300 rounded"
-              />
-              <label htmlFor="remember" className="ml-2 block text-gray-700">
-                Remember Password
-              </label>
             </div>
 
             <button
