@@ -2,11 +2,11 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import RegisterSerializer, CartSerializer, CartItemSerializer, UserProfileSerializer, UserProfileUpdateSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserProfileUpdateSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .models import Cart, CartItem, UserProfile
+from .models import UserProfile
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 

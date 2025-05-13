@@ -24,7 +24,7 @@ export default function AccountPage() {
     router.push('/');
     window.dispatchEvent(new Event('authChange'));
   };
-
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {

@@ -4,7 +4,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8888
     volumes:
       - ./product_service:/code
-      - ./data/media:/code/media
+      - ./product_service/media:/code/media
       - ./product_service/.env:/code/.env
     ports:
       - "3344:8888"
@@ -16,6 +16,7 @@ services:
     volumes:
       - ./user_service:/code
       - ./user_service/.env:/code/.env
+      - ./user_service/profile_pics:/code/profile_pics
     ports:
       - "3345:8889"
     environment:

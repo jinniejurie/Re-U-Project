@@ -67,6 +67,11 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
@@ -75,7 +80,7 @@ class SellerProductsView(APIView):
 
     def get(self, request):
         products = Product.objects.filter(created_by=request.user)
-        serializer = ProductSerializer(products, many=True)
+        serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
 
 class ProductDetailView(APIView):
