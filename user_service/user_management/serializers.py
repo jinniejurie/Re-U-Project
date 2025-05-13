@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
-from .models import Cart, CartItem, UserProfile
+from .models import UserProfile
 
 class UserProfileSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source='profile.phone', required=False)
@@ -24,9 +24,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2')
+        fields = ('id', 'username', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
-    
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
@@ -36,9 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": list(e.messages)})
         return attrs
 
-
     def create(self, validated_data):
-        validated_data.pop('password2')
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -67,19 +65,3 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid credentials')
         attrs['user'] = user
         return attrs
-
-class CartItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartItem
-        fields = ['id', 'product_id', 'product_name', 'product_price', 'quantity', 'added_at']
-
-class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True)
-    total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Cart
-        fields = ['id', 'items', 'total', 'created_at', 'updated_at']
-
-    def get_total(self, obj):
-        return sum(item.product_price * item.quantity for item in obj.items.all()) 
