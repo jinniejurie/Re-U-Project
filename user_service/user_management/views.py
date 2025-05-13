@@ -51,7 +51,6 @@ class AccountView(APIView):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'phone': profile.phone,
-                'photo': profile.profile_picture.url if profile.profile_picture else None,
                 'is_seller': profile.is_seller
             }
         }, status=status.HTTP_200_OK)
@@ -70,8 +69,6 @@ class AccountView(APIView):
         # อัพเดทข้อมูลใน UserProfile
         if 'phone' in data:
             profile.phone = data['phone']
-        if 'photo' in request.FILES:
-            profile.profile_picture = request.FILES['photo']
         if 'is_seller' in data:
             profile.is_seller = data['is_seller']
         
@@ -85,7 +82,6 @@ class AccountView(APIView):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'phone': profile.phone,
-                'photo': profile.profile_picture.url if profile.profile_picture else None,
                 'is_seller': profile.is_seller
             }
         }, status=status.HTTP_200_OK)
@@ -105,7 +101,6 @@ class AccountView(APIView):
                     'first_name': user.first_name,
                     'last_name': user.last_name,
                     'phone': profile.phone,
-                    'photo': profile.profile_picture.url if profile.profile_picture else None,
                     'is_seller': profile.is_seller
                 }
             })

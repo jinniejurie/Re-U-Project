@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Product, Category
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 def get_all_products(request):
@@ -21,7 +23,9 @@ def get_all_products(request):
             'image': request.build_absolute_uri(p.image.url) if p.image else None
         } for p in products
     ]
-    return JsonResponse(data, safe=False)
+    response = JsonResponse(data, safe=False)
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 def get_products_by_category(request, category_name):
     try:
@@ -37,7 +41,9 @@ def get_products_by_category(request, category_name):
                 'image': request.build_absolute_uri(p.image.url) if p.image else None
             } for p in products
         ]
-        return JsonResponse(data, safe=False)
+        response = JsonResponse(data, safe=False)
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
     except Category.DoesNotExist:
         return JsonResponse({'error': 'Category not found'}, status=404)
 
@@ -51,9 +57,16 @@ def get_product_by_id(request, category_name, product_id):
             'description': product.description,
             'price': product.price,
             'category': product.category.name,
-            'image': request.build_absolute_uri(product.image.url) if product.image else None
-        } 
-        return JsonResponse(data)
+            'image': request.build_absolute_uri(product.image.url) if product.image else None,
+            'seller': {
+                'username': product.created_by.username if product.created_by else None,
+                'first_name': product.created_by.first_name if product.created_by else None,
+                'last_name': product.created_by.last_name if product.created_by else None
+            }
+        }
+        response = JsonResponse(data)
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
     except Product.DoesNotExist:
         return JsonResponse({'error': 'Product not found'}, status=404)
 
@@ -74,6 +87,19 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            print('DEBUG: request.FILES =', request.FILES)
+            print('DEBUG: request.data =', request.data)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e:
+            print('DEBUG: Exception in create:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class SellerProductsView(APIView):
     permission_classes = [IsAuthenticated]

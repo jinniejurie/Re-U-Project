@@ -165,7 +165,7 @@ function CombinedSidebar({ isSeller, active, setActive }) {
           </div>
         )}
         <div>
-          <div className="font-bold text-lg text-reu-brown mb-2">Buyer</div>
+          <div className="font-bold text-lg text-reu-brown mb-2 mt-12">Buyer</div>
           <button onClick={() => setActive('buyer-orders')} className={`block w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors mb-2 ${active === 'buyer-orders' ? 'bg-reu-brown text-white' : 'text-reu-brown hover:bg-reu-brown/10'}`}>Order History</button>
           {/* Add more buyer menu items here */}
         </div>

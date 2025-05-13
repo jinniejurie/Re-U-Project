@@ -59,18 +59,18 @@ export default function ProductDetail() {
       // Save updated cart to localStorage
       localStorage.setItem('cart', JSON.stringify(existingCart));
       
-      // 🔁 Navigate to cart page after successful add
-    router.push('/cart');
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    alert('Failed to add product to cart. Please try again.');
-  } finally {
-    setAddingToCart(false);
-  }
-};
+      // Navigate to cart page after successful add
+      router.push('/cart');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart. Please try again.');
+    } finally {
+      setAddingToCart(false);
+    }
+  };
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (!product || product.error) return <div className="text-center py-10 text-red-600">Product not found.</div>;
+  if (!product || product.error) return <div className="text-center py-10 text-red-600 mt-12">Product not found.</div>;
 
   return (
     <div className="min-h-screen bg-reu-cream">
@@ -92,9 +92,10 @@ export default function ProductDetail() {
             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
               <div className="aspect-square relative">
                 <img 
-                  src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
+                  src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/'}${product.image}`) : '/placeholder-product.jpg'}
                   alt={product.name}
                   className="object-cover w-full h-full"
+                  crossOrigin="anonymous"
                 />
               </div>
             </div>
@@ -105,9 +106,34 @@ export default function ProductDetail() {
               <p className="text-xl sm:text-2xl text-reu-brown mb-6">{product.price} THB</p>
               
               <div className="mb-8">
-                <h2 className="text-lg sm:text-xl font-semibold mb-2">Description</h2>
+                <h2 className="text-lg sm:text-xl text-reu-brown font-semibold mb-2">Description</h2>
                 <p className="text-reu-brown/80">{product.description}</p>
               </div>
+
+              {/* Seller Information */}
+              {product.seller && (
+                <div className="mb-8 p-6 bg-white rounded-xl shadow-md border border-reu-brown/10 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 rounded-full bg-reu-red/10 flex items-center justify-center mr-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-reu-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 className="text-lg sm:text-xl text-reu-brown font-semibold">Seller Information</h2>
+                    </div>
+                  </div>
+                  <div className="pl-14">
+                    <p className="text-reu-brown/90 font-medium">
+                      {product.seller.first_name && product.seller.last_name 
+                        ? `${product.seller.first_name} ${product.seller.last_name}`
+                        : product.seller.username}
+                    </p>
+                    <div className="mt-2 flex items-center text-sm text-reu-brown/70">
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <button 
                 onClick={handleAddToCart}
