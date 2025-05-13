@@ -49,24 +49,25 @@ export default function RegisterSellerPage() {
           <h2 className={`text-lg md:text-xl font-semibold text-reu-brown text-center mb-4 ${unbounded.className}`}>A Little Something from Us</h2>
           <div className="w-16 h-1 bg-[#fa6a5b] rounded mx-auto mb-6" />
           <p className="text-reu-brown text-base md:text-lg leading-relaxed text-center mb-6">
-            ที่ Re:U เราเชื่อว่า ของทุกชิ้นมีเรื่องราว และ ทุกคนสมควรได้โอกาสในการค้นพบสิ่งนั้นอีกครั้ง<br /><br />
-            การเลือกขายของกับเรา ไม่ใช่แค่การเคลียร์พื้นที่ในห้อง แต่มันคือการช่วยกันสร้างสังคมแห่งการแบ่งปัน ที่หมุนเวียนของใช้ดี ๆ อยู่ในรั้วธรรมศาสตร์
-            ให้ของชิ้นเดิม ได้เริ่มต้นใหม่ ให้เพื่อนนักศึกษาด้วยกัน ได้ประหยัด ได้ใช้ และได้รู้สึกว่าพื้นที่นี้คือของเรา<br /><br />
-            <span className="font-semibold">ก่อนคุณจะลงขายของชิ้นแรก เราอยากให้คุณร่วมแบ่งปันแนวคิดนี้กับเรา:</span>
+            ที่ Re:U เราเชื่อว่า ของทุกชิ้นมีเรื่องราว และทุกคนควรได้โอกาสในการค้นพบสิ่งของเหล่านั้น<br /><br />
+            การเลือกขายของกับเรา ไม่ใช่แค่การเคลียร์พื้นที่ในห้อง แต่มันคือการช่วยกันสร้างสังคมแห่งการแบ่งปัน ที่หมุนเวียนของใช้ดี ๆ ในรั้วธรรมศาสตร์
+            ให้ของชิ้นเดิม ได้เริ่มต้นใหม่ ให้เพื่อนนักศึกษาด้วยกัน ได้ประหยัด ได้ใช้ และได้รู้สึกว่าพื้นที่นี้คือพื้นที่แห่งการแลกเปลี่ยนของเรา<br /><br />
+            <span className="font-semibold">ก่อนจะลงขายของชิ้นแรก เราอยากให้คุณร่วมแบ่งปันแนวคิดนี้กับเรา:</span>
           </p>
           <ul className="text-reu-brown text-base md:text-lg list-disc list-inside mb-6 space-y-1">
             <li>ตั้งราคาที่เป็นธรรม</li>
             <li>ลงรายละเอียดสินค้าให้ตรงไปตรงมา</li>
             <li>พูดคุยกับผู้ซื้ออย่างให้เกียรติ</li>
-            <li>และอย่าลืมว่า จุดมุ่งหมายของเราคือการ หมุนเวียนคุณค่า ไม่ใช่แค่การขายของ</li>
+            <li>และอย่าลืมว่า จุดมุ่งหมายของเราไม่ใช่เพียงแค่การขายของ แต่คือการหมุนเวียนคุณค่าของสิ่งของ</li>
           </ul>
           <p className="text-reu-brown text-base md:text-lg text-center mb-2">
-            จะขายเพราะอยากได้เงินเก็บเพิ่ม
+            หากคุณอยากจะขายเพราะอยากได้เงินเก็บเพิ่ม
             หรือจะขายเพราะอยากลดของในหอ<br />
-            แค่คุณขายเพราะเชื่อว่า TU ควรเป็นพื้นที่แห่งความยั่งยืน และการแบ่งปัน<br />
-            <span className="font-bold text-[#fa6a5b]">คุณมาถูกที่แล้ว</span>
+            ขอแค่คุณขายเพราะเชื่อว่า เราควรมีพื้นที่แห่งการแบ่งปัน และความยั่งยืน<br />
+            ก็ถือว่า 
+            <span className="font-bold text-[#fa6a5b]"> คุณมาถูกที่แล้ว</span>
           </p>
-          <p className="text-reu-brown text-base md:text-lg text-center font-semibold">พร้อมจะส่งต่อหรือยัง?</p>
+          <p className="text-reu-brown text-base md:text-lg text-center font-semibold">พร้อมที่จะส่งต่อหรือยัง?</p>
         
         </section>
         <form onSubmit={handleRegister} className="w-full max-w-2xl flex flex-col items-center gap-6">

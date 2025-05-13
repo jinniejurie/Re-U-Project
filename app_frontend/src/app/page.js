@@ -26,7 +26,7 @@ const ProductPreview = ({ product }) => (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
         <img 
-          src={product.image} 
+          src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
           alt={product.name}
           className="object-cover w-full h-full"
         />
