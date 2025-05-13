@@ -26,6 +26,9 @@ from product_management.views import (
     SellerProductsView,
     ProductDetailView
 )
+from order_management.views import (
+    OrderCreateView, SellerOrdersView, BuyerOrdersView, CartView, CartItemView, CartClearView
+)
 
 
 urlpatterns = [
@@ -40,4 +43,7 @@ urlpatterns = [
     path('api/products/', ProductViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/products/seller/', SellerProductsView.as_view()),
     path('api/products/<int:pk>/', ProductDetailView.as_view()),
+    path('api/cart/', CartView.as_view(), name='cart'),
+    path('api/cart/clear/', CartClearView.as_view(), name='cart-clear'),
+    path('api/cart/item/<int:item_id>/', order_views.CartItemView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

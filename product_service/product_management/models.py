@@ -12,7 +12,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.PositiveIntegerField()
-    condition = models.CharField(max_length=50, choices=[('new', 'New'), ('used', 'Used')])
+    condition = models.CharField(max_length=50, choices=[('new', 'New'), ('used', 'Used'), ('defect', 'Defect')])
     category = models.ForeignKey(Category, related_name="products", on_delete=models.SET_NULL, null=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

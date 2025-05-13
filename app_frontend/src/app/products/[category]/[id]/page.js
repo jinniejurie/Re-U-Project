@@ -32,33 +32,26 @@ export default function ProductDetail() {
     }
   }, [category, id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     try {
       setAddingToCart(true);
-      
-      // Get existing cart from localStorage
-      const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-      
-      // Check if product already exists in cart
-      const existingItemIndex = existingCart.findIndex(item => item.product_id === product.id);
-      
-      if (existingItemIndex > -1) {
-        // Update quantity if product exists
-        existingCart[existingItemIndex].quantity += 1;
-      } else {
-        // Add new item if product doesn't exist
-        existingCart.push({
-          product_id: product.id,
-          product_name: product.name,
-          product_price: parseFloat(product.price),
-          quantity: 1,
-          image: product.image
-        });
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
       }
-      
-      // Save updated cart to localStorage
-      localStorage.setItem('cart', JSON.stringify(existingCart));
-      
+      const response = await fetch('http://localhost:3344/api/cart/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ product_id: product.id }),
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.errors || 'Failed to add to cart');
+      }
       // Navigate to cart page after successful add
       router.push('/cart');
     } catch (error) {
