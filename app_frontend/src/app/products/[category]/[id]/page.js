@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function ProductDetail() {
   const params = useParams();
@@ -84,10 +85,12 @@ export default function ProductDetail() {
             {/* Product Image */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
               <div className="aspect-square relative">
-                <img 
+                <Image 
                   src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`) : '/placeholder-product.jpg'}
                   alt={product.name}
-                  className="object-cover w-full h-full"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover"
                   crossOrigin="anonymous"
                 />
               </div>
