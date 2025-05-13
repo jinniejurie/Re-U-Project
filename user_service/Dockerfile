@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 8889
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8889"]
+CMD ["gunicorn", "user_service.wsgi:application", "--bind", "0.0.0.0:8889"]
