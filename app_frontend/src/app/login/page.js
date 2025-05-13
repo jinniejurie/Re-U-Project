@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:3345/api/token/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -44,7 +44,7 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost:3345/api/register/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function Register() {
       }      
 
       // Auto-login after successful registration
-      const loginResponse = await fetch('http://localhost:3345/api/token/', {
+      const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

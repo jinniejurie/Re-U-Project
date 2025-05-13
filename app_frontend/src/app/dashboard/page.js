@@ -198,7 +198,7 @@ export default function DashboardPage() {
           window.location.href = '/login';
           return;
         }
-        const res = await fetch('http://localhost:3345/api/account/', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await res.json();

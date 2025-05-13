@@ -5,7 +5,7 @@ export async function getValidAccessToken() {
     if (!access || isTokenExpired(access)) {
       if (refresh) {
         try {
-          const res = await fetch('http://localhost:3345/api/token/refresh/', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/token/refresh/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refresh }),

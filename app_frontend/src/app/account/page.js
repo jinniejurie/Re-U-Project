@@ -30,7 +30,7 @@ export default function AccountPage() {
     }
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:3345/api/account/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function AccountPage() {
       formData.append('last_name', userData.lastName);
       formData.append('phone', userData.phone);
 
-      const response = await fetch('http://localhost:3345/api/account/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
