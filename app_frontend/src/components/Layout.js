@@ -35,7 +35,7 @@ export default function Layout({ children }) {
       ? 'text-reu-red' 
       : isAuthPage || isCartOrCheckoutPage
         ? 'text-reu-brown' 
-        : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+        : isCollectionSection
           ? 'text-reu-brown' 
           : 'text-white';
   
@@ -43,7 +43,7 @@ export default function Layout({ children }) {
     ? 'hover:text-reu-red/80' 
     : isAuthPage || isCartOrCheckoutPage
       ? 'hover:text-reu-red'
-      : isCollectionSection || (isProductPage && lastScrollY > window.innerHeight * 0.8)
+      : isCollectionSection
         ? 'hover:text-reu-red/80'
         : 'hover:text-reu-cream';
 
