@@ -19,7 +19,6 @@ export default function Footer() {
               <li><a href="/" className="hover:text-reu-red transition-colors">Home</a></li>
               <li><a href="/products" className="hover:text-reu-red transition-colors">Products</a></li>
               <li><a href="/dashboard" className="hover:text-reu-red transition-colors">Dashboard</a></li>
-              <li><a href="/about" className="hover:text-reu-red transition-colors">About</a></li>
 
             </ul>
           </div>

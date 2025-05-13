@@ -89,7 +89,7 @@ export default function Home() {
     },
     {
       title: "Electronics",
-      image: "/images/electronics-category.jpg",
+      image: "/images/electronics-category.avif",
       link: "/products/electronics"
     },
     {
@@ -109,7 +109,7 @@ export default function Home() {
     },
     {
       title: "Other",
-      image: "/images/other-category.jpg",
+      image: "/images/other-category.avif",
       link: "/products/other"
     }
   ];

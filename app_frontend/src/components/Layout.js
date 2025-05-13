@@ -194,16 +194,6 @@ export default function Layout({ children }) {
                   Dashboard
                 </Link>
                 </li>
-                
-                <li>
-                <Link
-                  href="/about"
-                  onClick={() => setIsSideNavOpen(false)}
-                  className="text-2xl text-reu-brown hover:text-reu-red transition-colors"
-                >
-                  About
-                </Link>
-              </li>
 
             </ul>
           </nav>
