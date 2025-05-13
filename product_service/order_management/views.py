@@ -37,7 +37,26 @@ class OrderCreateView(APIView):
             return Response({'message': 'Order created successfully!', 'order_id': order.id}, status=201)
         else:
             return Response({'errors': serializer.errors}, status=400)
-            
+
+class SellerOrdersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Get all orders where the products were created by the seller
+        seller_products = Product.objects.filter(created_by=request.user)
+        orders = Order.objects.filter(items__product__in=seller_products).distinct()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+class BuyerOrdersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Get all orders created by the buyer
+        orders = Order.objects.filter(user=request.user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
 class CartView(View):
     permission_classes = [IsAuthenticated]
 

@@ -27,6 +27,35 @@ const statusColor = {
 };
 
 function SellerOrderList() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:3344/api/orders/seller/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        const data = await response.json();
+        setOrders(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+
   return (
     <div className="p-8 w-full">
       <h2 className="text-3xl font-bold text-reu-brown mb-8 mt-12">Dashboard / Order Lists</h2>
@@ -43,13 +72,13 @@ function SellerOrderList() {
             </tr>
           </thead>
           <tbody>
-            {mockSellerOrders.map(order => (
+            {orders.map(order => (
               <tr key={order.id} className="border-b last:border-0">
                 <td className="px-4 py-3">{order.id}</td>
-                <td className="px-4 py-3">{order.name}</td>
-                <td className="px-4 py-3">{order.address}</td>
-                <td className="px-4 py-3">{order.date}</td>
-                <td className="px-4 py-3">{order.type}</td>
+                <td className="px-4 py-3">{`${order.first_name} ${order.last_name}`}</td>
+                <td className="px-4 py-3">{order.meeting_location}</td>
+                <td className="px-4 py-3">{new Date(order.created_at).toLocaleDateString()}</td>
+                <td className="px-4 py-3">{order.delivery_type}</td>
                 <td className="px-4 py-3">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor[order.status]}`}>{order.status}</span>
                 </td>
@@ -63,18 +92,55 @@ function SellerOrderList() {
 }
 
 function BuyerOrderHistory() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:3344/api/orders/buyer/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        const data = await response.json();
+        setOrders(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+
   return (
     <div className="p-8 w-full">
       <h2 className="text-3xl font-bold text-reu-brown mb-8 mt-12">Dashboard - Order History</h2>
       <div className="flex flex-col gap-8">
-        {mockBuyerOrders.map((order, idx) => (
-          <div key={idx} className="flex items-center gap-8 bg-white rounded-xl p-6 shadow">
-            <img src={order.image} alt={order.name} className="w-32 h-32 object-cover rounded-xl border-2 border-reu-brown" />
+        {orders.map((order) => (
+          <div key={order.id} className="flex items-center gap-8 bg-white rounded-xl p-6 shadow">
+            {order.items[0]?.product?.image && (
+              <img 
+                src={order.items[0].product.image} 
+                alt={order.items[0].product_name} 
+                className="w-32 h-32 object-cover rounded-xl border-2 border-reu-brown" 
+              />
+            )}
             <div className="flex-1">
-              <div className="text-xl font-semibold text-reu-brown">{order.name}</div>
+              <div className="text-xl font-semibold text-reu-brown">
+                {order.items.map(item => item.product_name).join(', ')}
+              </div>
               <div className="text-reu-red font-semibold">Order #{order.id}</div>
             </div>
-            <div className="text-lg font-semibold {statusColor[order.status]}">{order.status}</div>
+            <div className="text-lg font-semibold text-reu-red">{order.status}</div>
             <button className="ml-8 text-reu-red hover:text-reu-brown">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
