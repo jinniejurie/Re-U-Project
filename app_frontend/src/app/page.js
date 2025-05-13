@@ -53,6 +53,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
     async function fetchFeaturedProducts() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`);
