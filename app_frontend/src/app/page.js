@@ -150,7 +150,7 @@ export default function Home() {
                   <h3 className="text-2xl font-medium mb-2">Send it on its way</h3>
                   <p className="text-sm max-w-xs">
                     Let your unused stuff spark joy again
-                    for someone else in TU who'll love it just as much.
+                    for someone else in TU who&apos;ll love it just as much.
                   </p>
                 </div>
               </div>
