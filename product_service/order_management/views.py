@@ -21,19 +21,14 @@ class OrderCreateView(APIView):
             for item_data in items_data:
                 product_id = item_data.get('product_id')
                 product = Product.objects.get(id=product_id)
-                quantity = item_data.get('quantity', 1)
-                order_item, created = OrderItem.objects.get_or_create(
+                OrderItem.objects.get_or_create(
                     order=order,
                     product=product,
                     defaults={
                         'product_name': product.name,
                         'price': product.price,
-                        'quantity': quantity,
                     }
                 )
-                if not created:
-                    order_item.quantity += quantity
-                    order_item.save()
             return Response({'message': 'Order created successfully!', 'order_id': order.id}, status=201)
         else:
             return Response({'errors': serializer.errors}, status=400)
@@ -57,7 +52,7 @@ class BuyerOrdersView(APIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
-class CartView(View):
+class CartView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -67,24 +62,18 @@ class CartView(View):
 
     def post(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
-        
         product_id = request.data.get('product_id')
         existing_item = cart.items.filter(product_id=product_id).first()
-        
         if existing_item:
-            existing_item.quantity += int(request.data.get('quantity', 1))
-            existing_item.save()
-            serializer = CartItemSerializer(existing_item)
+            return JsonResponse({'error': 'Product already in cart'}, status=400)
+        serializer = CartItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(cart=cart)
         else:
-            serializer = CartItemSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save(cart=cart)
-            else:
-                return JsonResponse({'errors': serializer.errors}, status=400)
-
+            return JsonResponse({'errors': serializer.errors}, status=400)
         return JsonResponse(serializer.data, status=200)
 
-class CartItemView(View):
+class CartItemView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, item_id):
@@ -97,13 +86,13 @@ class CartItemView(View):
             return JsonResponse({'error': 'Cart or Item not found'}, status=404)
 
     def patch(self, request, item_id):
-        try:
-            cart = Cart.objects.get(user=request.user)
-            item = cart.items.get(id=item_id)
-            serializer = CartItemSerializer(item, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data, status=200)
-            return JsonResponse({'errors': serializer.errors}, status=400)
-        except (Cart.DoesNotExist, CartItem.DoesNotExist):
-            return JsonResponse({'error': 'Cart or Item not found'}, status=404)
+        return JsonResponse({'error': 'Quantity update not supported'}, status=400)
+
+class CartClearView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.items.all().delete()
+        return JsonResponse({'message': 'Cart cleared successfully'}, status=200)
+    

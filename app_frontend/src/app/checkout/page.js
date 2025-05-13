@@ -6,8 +6,9 @@ import Link from 'next/link';
 
 export default function Checkout() {
   const router = useRouter();
-  // ดึงตะกร้าจาก localStorage
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [form, setForm] = useState({
     email: '',
     firstName: '',
@@ -22,18 +23,33 @@ export default function Checkout() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('cart');
-    if (saved) {
+    const fetchCart = async () => {
       try {
-        setCartItems(JSON.parse(saved));
-      } catch (e) {
-        console.error('Invalid cart JSON', e);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+        const response = await fetch('http://localhost:3344/api/cart/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch cart');
+        }
+        const data = await response.json();
+        setCart(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, []);
+    };
+    fetchCart();
+  }, [router]);
 
-  // คำนวณยอดรวม (quantity=1 เสมอ)
-  const subtotal = cartItems.reduce((sum, i) => sum + i.product_price, 0);
+  const subtotal = cart ? cart.items.reduce((total, item) => total + item.product.price, 0) : 0;
   const shipping = 0;
   const total = subtotal + shipping;
 
@@ -44,7 +60,7 @@ export default function Checkout() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // เตรียม payload ให้ตรงกับ serializer ฝั่ง Django (ไม่มี quantity)
+    if (!cart) return;
     const payload = {
       email: form.email,
       first_name: form.firstName,
@@ -56,10 +72,10 @@ export default function Checkout() {
       preferred_time: form.preferredTime,
       notes: form.notes,
       status: 'pending',
-      items: cartItems.map(i => ({
-        product_id: i.product_id,
-        product_name: i.product_name,
-        price: i.product_price
+      items: cart.items.map(item => ({
+        product_id: item.product.id,
+        product_name: item.product.name,
+        price: item.product.price
       })),
     };
 
@@ -73,28 +89,56 @@ export default function Checkout() {
     })
     .then(async res => {
       const text = await res.text();
-      console.log('Raw response:', text);
       if (!res.ok) throw new Error(text);
       return JSON.parse(text);
     })
     .then(data => {
+      clearBackendCart();
       setShowModal(true);
     })
     .catch(err => {
-      console.error('Order failed:', err);
       alert('Failed to place order.');
     });
   };
 
   const handleModalClose = () => {
-    localStorage.removeItem('cart');
     setShowModal(false);
     router.push('/');
   };
 
+  const clearBackendCart = async () => {
+    const token = localStorage.getItem('token');
+    await fetch('http://localhost:3344/api/cart/clear/', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  };
+
+  if (loading) return <div className="text-center py-10 mt-12">Loading...</div>;
+  if (error) return <div className="text-center py-10 text-red-600 mt-12">{error}</div>;
+  if (!cart || cart.items.length === 0) {
+    return (
+      <div className="min-h-screen bg-reu-cream">
+        <div className="container mx-auto px-4 pt-32 pb-16">
+          <h1 className="text-4xl font-bold text-reu-brown text-center mb-12">Checkout</h1>
+          <div className="text-center">
+            <p className="text-xl text-reu-brown mb-4">Your cart is empty</p>
+            <Link
+              href="/products"
+              className="inline-block bg-reu-red text-white px-6 py-3 rounded-lg hover:bg-reu-red/90 transition-colors"
+            >
+              Continue Shopping
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-reu-cream flex items-center justify-center">
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full flex flex-col items-center">
@@ -192,15 +236,15 @@ export default function Checkout() {
         {/* Order Summary */}
         <div className="flex-1 bg-reu-cream rounded-r-2xl shadow-xl p-10 flex flex-col gap-6 justify-between h-full min-w-[340px] max-w-[420px] overflow-y-auto">
           <div>
-            {cartItems.map(item => (
-              <div key={item.product_id} className="flex items-center gap-4 mb-2">
-                <img src={item.image || '/placeholder-product.jpg'} alt={item.product_name}
+            {cart.items.map(item => (
+              <div key={item.id} className="flex items-center gap-4 mb-2">
+                <img src={item.product.image_url || '/placeholder-product.jpg'} alt={item.product.name}
                   className="w-20 h-20 object-cover rounded-xl bg-white border"
                 />
                 <div className="flex-1">
-                  <div className="font-bold text-reu-brown text-lg">{item.product_name}</div>
+                  <div className="font-bold text-reu-brown text-lg">{item.product.name}</div>
                 </div>
-                <div className="text-reu-brown text-lg font-medium">{item.product_price} THB</div>
+                <div className="text-reu-brown text-lg font-medium">{item.product.price} THB</div>
               </div>
             ))}
             <div className="border-t border-reu-brown/20 my-4"></div>

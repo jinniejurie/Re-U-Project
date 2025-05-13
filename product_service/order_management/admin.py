@@ -14,5 +14,16 @@ class OrderItemAdmin(admin.ModelAdmin):
         return obj.product.name if obj.product else '-'
     get_product_name.short_description = 'Product'
 
-admin.site.register(Cart)
-admin.site.register(CartItem)
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'created_at', 'updated_at')
+    search_fields = ('user__username',)
+    list_filter = ('created_at', 'updated_at')
+    ordering = ('-created_at',)
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'cart', 'product', 'added_at')
+    search_fields = ('cart__user__username', 'product__name')
+    list_filter = ('added_at',)
+    ordering = ('-added_at',)
