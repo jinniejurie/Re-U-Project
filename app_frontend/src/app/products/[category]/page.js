@@ -30,10 +30,22 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const categorySlugToName = {
+    clothing: "clothing",
+    accessories: "accessories",
+    books: "books",
+    electronics: "electronics",
+    "sport-equipments": "sport equipment",
+    "stationary-art": "stationary & art supplies",
+    "health-beauty": "health & beauty",
+    other: "other"
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3344/products/${category}/`);
+        const backendCategory = categorySlugToName[category] || category;
+        const response = await fetch(`http://localhost:3344/products/${backendCategory}/`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
