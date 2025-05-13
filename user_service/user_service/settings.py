@@ -28,7 +28,13 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 're-u-frontend.onrender.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    're-u-frontend.onrender.com',
+    're-u-user-api.onrender.com',
+]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
