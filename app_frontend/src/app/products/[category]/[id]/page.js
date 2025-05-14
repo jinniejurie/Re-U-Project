@@ -4,7 +4,6 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 export default function ProductDetail() {
   const params = useParams();
@@ -72,7 +71,7 @@ export default function ProductDetail() {
           {/* Back to Products Link */}
           <Link 
             href="/products" 
-            className="inline-flex items-center text-reu-red hover:text-reu-brown transition-colors mb-6"
+            className="inline-flex items-center text-reu-red hover:text-reu-brown transition-colors mb-6 mt-16 sm:mt-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -84,12 +83,11 @@ export default function ProductDetail() {
             {/* Product Image */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg">
               <div className="aspect-square relative">
-                <Image 
+                <img
                   src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/'}${product.image}`) : '/placeholder-product.jpg'}
                   alt={product.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover"
+                  className="object-cover w-full h-full"
+                  style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
                   crossOrigin="anonymous"
                 />
               </div>

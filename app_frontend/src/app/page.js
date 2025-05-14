@@ -8,12 +8,11 @@ import Footer from '@/components/Footer';
 const CategoryCard = ({ title, image, link }) => (
   <Link href={link} className="block group">
     <div className="relative aspect-square rounded-2xl overflow-hidden shadow-lg">
-      <Image
+      <img
         src={image}
         alt={title}
-        fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-        className="object-cover group-hover:scale-105 transition-transform duration-300"
+        className="object-cover group-hover:scale-105 transition-transform duration-300 w-full h-full"
+        style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
         <h3 className="text-white text-2xl font-bold p-6">{title}</h3>
@@ -26,12 +25,11 @@ const ProductPreview = ({ product }) => (
   <Link href={`/products/${product.category}/${product.id}`} className="block">
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
-        <Image 
+        <img
           src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
           alt={product.name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover"
+          className="object-cover w-full h-full"
+          style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
         />
       </div>
       <div className="p-4">
