@@ -53,7 +53,6 @@ export default function ProductDetail() {
         const data = await response.json();
         throw new Error(data.errors || 'Failed to add to cart');
       }
-      // Navigate to cart page after successful add
       router.push('/cart');
     } catch (error) {
       console.error('Error adding to cart:', error);

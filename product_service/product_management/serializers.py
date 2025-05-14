@@ -26,11 +26,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def validate_image(self, value):
         if value:
-            # Check file size (max 5MB)
             if value.size > 5 * 1024 * 1024:
                 raise serializers.ValidationError("Image size should not exceed 5MB")
             
-            # Check file type
             content_type = value.content_type.split('/')[0]
             if content_type != 'image':
                 raise serializers.ValidationError("File must be an image")
