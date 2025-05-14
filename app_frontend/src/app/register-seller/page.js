@@ -18,7 +18,7 @@ export default function RegisterSellerPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3345/api/account/', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

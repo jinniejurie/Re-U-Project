@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AccountSidebar from '@/components/AccountSidebar';
 
-const PRODUCT_API_URL = 'http://localhost:3344';
+const PRODUCT_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SellProductsPage() {
   const router = useRouter();
@@ -270,7 +270,7 @@ export default function SellProductsPage() {
                   <li key={product.id} className="flex items-center gap-4 py-4">
                     {product.image && (
                       <img
-                        src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
+                        src={product.image ? (product.image.startsWith('http') ? product.image : `${PRODUCT_API_URL}${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
                         alt={product.name}
                         className="w-16 h-16 object-cover rounded-lg border"
                       />

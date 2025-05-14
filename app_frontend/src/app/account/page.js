@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import AccountSidebar from '@/components/AccountSidebar';
 
 export default function AccountPage() {
@@ -11,11 +11,8 @@ export default function AccountPage() {
     username: '',
     email: '',
     phone: '',
-    photo: null,
   });
   const [error, setError] = useState('');
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const fileInputRef = useRef();
   const [loading, setLoading] = useState(true);
 
   const handleLogout = () => {
@@ -33,7 +30,7 @@ export default function AccountPage() {
     }
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:3345/api/account/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -47,11 +44,7 @@ export default function AccountPage() {
             username: data.user.username || '',
             email: data.user.email || '',
             phone: data.user.phone || '',
-            photo: data.user.photo || null,
           });
-          if (data.user.photo) {
-            setPhotoPreview(data.user.photo);
-          }
         } else {
           setError(data.detail || 'Error fetching account data');
         }
@@ -63,14 +56,6 @@ export default function AccountPage() {
     };
     fetchUserData();
   }, [router]);
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setUserData(prev => ({ ...prev, photo: file }));
-      setPhotoPreview(URL.createObjectURL(file));
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,11 +74,8 @@ export default function AccountPage() {
       formData.append('first_name', userData.firstName);
       formData.append('last_name', userData.lastName);
       formData.append('phone', userData.phone);
-      if (userData.photo) {
-        formData.append('photo', userData.photo);
-      }
 
-      const response = await fetch('http://localhost:3345/api/account/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/account/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -112,12 +94,7 @@ export default function AccountPage() {
         firstName: data.user.first_name || prev.firstName,
         lastName: data.user.last_name || prev.lastName,
         phone: data.user.phone || prev.phone,
-        photo: data.user.photo || prev.photo,
       }));
-
-      if (data.user.photo) {
-        setPhotoPreview(data.user.photo);
-      }
 
       alert('Profile updated successfully!');
     } catch (err) {
@@ -136,30 +113,6 @@ export default function AccountPage() {
       <div className="flex-1 flex items-center justify-center">
         <div className="container mx-auto px-4 pt-12 pb-8">
           <div className="flex flex-col md:flex-row items-stretch gap-12 max-w-5xl mx-auto">
-            {/* Profile Photo Card */}
-            <div className="bg-white rounded-2xl shadow p-10 flex flex-col justify-center items-center w-full max-w-xs border border-gray-200 h-full">
-              <div className="relative w-64 h-64 mb-4">
-                <img
-                  src={photoPreview || '/default-profile.png'}
-                  alt="Profile Preview"
-                  className="w-full h-full object-cover rounded-xl border"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                  ref={fileInputRef}
-                  onChange={handlePhotoChange}
-                />
-                <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-40 text-white text-center py-2 rounded-b-xl cursor-pointer" onClick={() => fileInputRef.current.click()}>
-                  <span className="inline-flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" /></svg>
-                    Upload Photo
-                  </span>
-                </div>
-              </div>
-            </div>
-
             {/* Form Fields */}
             <form onSubmit={handleSave} className="flex-1 grid grid-cols-2 gap-x-6 gap-y-6 items-start text-reu-brown">
               <h1 className="col-span-2 text-3xl font-bold text-reu-brown mb-2">Account settings</h1>
@@ -206,29 +159,28 @@ export default function AccountPage() {
                   name="email"
                   value={userData.email}
                   onChange={handleInputChange}
-                  placeholder="Email address"
+                  placeholder="Enter your email"
                   className="w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red px-4 py-3 placeholder-gray-400"
                   readOnly
                 />
               </div>
               <div className="col-span-2">
-                <label className="block mb-2 font-medium">Phone number</label>
+                <label className="block mb-2 font-medium">Phone</label>
                 <input
                   type="tel"
                   name="phone"
                   value={userData.phone}
                   onChange={handleInputChange}
-                  placeholder="xxx-xxx-xxxx"
+                  placeholder="Enter your phone number"
                   className="w-full rounded-md bg-gray-100 border-0 focus:ring-2 focus:ring-reu-red px-4 py-3 placeholder-gray-400"
                 />
               </div>
-              <div className="col-span-2 mt-2 flex justify-end">
-                <button 
-                  type="submit" 
-                  className="px-8 py-3 rounded-lg bg-[#fa6a5b] text-white font-semibold text-base hover:bg-[#e65c4d] transition-colors"
-                  disabled={loading}
+              <div className="col-span-2">
+                <button
+                  type="submit"
+                  className="w-full py-3 rounded-lg bg-[#fa6a5b] text-white font-semibold text-base hover:bg-[#e65c4d] transition-colors"
                 >
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  Save Changes
                 </button>
               </div>
             </form>

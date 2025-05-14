@@ -8,14 +8,13 @@ export default function Login() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberPassword, setRememberPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:3345/api/token/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +43,7 @@ export default function Login() {
         <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-lg p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-medium mb-4">Login to Account</h1>
-            <p className="text-gray-600">Please enter your email and password to continue</p>
+            <p className="text-gray-600">Please enter your username and password to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -78,19 +77,6 @@ export default function Login() {
               />
             </div>
 
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                checked={rememberPassword}
-                onChange={(e) => setRememberPassword(e.target.checked)}
-                className="h-4 w-4 text-reu-red focus:ring-reu-red border-gray-300 rounded"
-              />
-              <label htmlFor="remember" className="ml-2 block text-gray-700">
-                Remember Password
-              </label>
-            </div>
-
             <button
               type="submit"
               className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg hover:bg-[#FF6B6B]/90 transition-colors font-medium"
@@ -99,7 +85,7 @@ export default function Login() {
             </button>
 
             <div className="text-center text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-reu-red hover:text-reu-red/80">
                 Create Account
               </Link>

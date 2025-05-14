@@ -16,7 +16,7 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ['phone', 'profile_picture', 'is_seller']
+        fields = ['phone', 'is_seller']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -24,19 +24,25 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('id', 'username', 'email', 'password', 'password2')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True}
+        }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
         try:
             validate_password(attrs['password'])
         except serializers.ValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
+        
         return attrs
 
     def create(self, validated_data):
+        validated_data.pop('password2')  
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -52,10 +58,8 @@ class LoginSerializer(serializers.Serializer):
         username_or_email = attrs.get('username_or_email')
         password = attrs.get('password')
         user = None
-        # Try to authenticate by username
         user = authenticate(username=username_or_email, password=password)
         if not user:
-            # Try to authenticate by email
             try:
                 user_obj = User.objects.get(email=username_or_email)
                 user = authenticate(username=user_obj.username, password=password)

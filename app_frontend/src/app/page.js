@@ -12,6 +12,7 @@ const CategoryCard = ({ title, image, link }) => (
         src={image}
         alt={title}
         fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         className="object-cover group-hover:scale-105 transition-transform duration-300"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
@@ -25,10 +26,12 @@ const ProductPreview = ({ product }) => (
   <Link href={`/products/${product.category}/${product.id}`} className="block">
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square">
-        <img 
-          src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:3344${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
+        <Image 
+          src={product.image ? (product.image.startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image.startsWith('/') ? '' : '/media/'}${product.image}`) : '/placeholder-product.jpg'}
           alt={product.name}
-          className="object-cover w-full h-full"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover"
         />
       </div>
       <div className="p-4">
@@ -50,9 +53,10 @@ export default function Home() {
   };
 
   useEffect(() => {
+    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
     async function fetchFeaturedProducts() {
       try {
-        const response = await fetch('http://localhost:3344/products/');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`);
         if (!response.ok) {
           throw new Error('Failed to fetch featured products');
         }
@@ -69,8 +73,6 @@ export default function Home() {
     fetchFeaturedProducts();
   }, []);
 
-
-  // Mock data for categories
   const categories = [
     {
       title: "Clothing",
@@ -89,7 +91,7 @@ export default function Home() {
     },
     {
       title: "Electronics",
-      image: "/images/electronics-category.jpg",
+      image: "/images/electronics-category.avif",
       link: "/products/electronics"
     },
     {
@@ -109,7 +111,7 @@ export default function Home() {
     },
     {
       title: "Other",
-      image: "/images/other-category.jpg",
+      image: "/images/other-category.avif",
       link: "/products/other"
     }
   ];
@@ -149,7 +151,7 @@ export default function Home() {
                   <h3 className="text-2xl font-medium mb-2">Send it on its way</h3>
                   <p className="text-sm max-w-xs">
                     Let your unused stuff spark joy again
-                    for someone else in TU who'll love it just as much.
+                    for someone else in TU who&apos;ll love it just as much.
                   </p>
                 </div>
               </div>
